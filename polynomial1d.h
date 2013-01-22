@@ -2,7 +2,8 @@
 #define POLYNOMIAL1D_H
 
 
-namespace MC{
+namespace MC
+{
 class Polynomial1D
 {
 public:

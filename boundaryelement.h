@@ -1,12 +1,18 @@
 #ifndef BOUNDARYELEMENT_H
 #define BOUNDARYELEMENT_H
 
+#include "boundarynode.h"
+#include "polynomial1d.h"
 
-namespace MC{
-class BoundaryElement
+#define N_NODES_BOUNDARY_ELEMENT 3
+
+namespace MC
 {
-public:
-    BoundaryElement();
-};
+    class BoundaryElement
+    {
+        public:
+            BoundaryNode **nodes;
+            BoundaryElement();
+    };
 }
 #endif // BOUNDARYELEMENT_H
