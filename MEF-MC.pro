@@ -13,8 +13,24 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    node.cpp \
+    element.cpp \
+    mesh.cpp \
+    boundarynode.cpp \
+    boundaryelement.cpp \
+    polynomial1d.cpp \
+    polynomial2d.cpp \
+    functor2d.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    node.h \
+    element.h \
+    mesh.h \
+    boundarynode.h \
+    boundaryelement.h \
+    polynomial1d.h \
+    polynomial2d.h \
+    functor2d.h
 
 FORMS    += mainwindow.ui
