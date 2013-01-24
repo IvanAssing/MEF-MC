@@ -4,6 +4,4 @@ MC::BoundaryElement::BoundaryElement()
 {
 }
 
-MC::BoundaryElement::BoundaryElement()
-{
-}
+

@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui opengl
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -21,7 +21,8 @@ SOURCES += main.cpp\
     boundaryelement.cpp \
     polynomial1d.cpp \
     polynomial2d.cpp \
-    functor2d.cpp
+    functor2d.cpp \
+    graphicwindow.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -31,6 +32,7 @@ HEADERS  += mainwindow.h \
     boundaryelement.h \
     polynomial1d.h \
     polynomial2d.h \
-    functor2d.h
+    functor2d.h \
+    graphicwindow.h
 
 FORMS    += mainwindow.ui
