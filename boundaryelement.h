@@ -11,8 +11,16 @@ namespace MC
     class BoundaryElement
     {
         public:
+            int index;
+
+            Polynomial1D curveX;
+            Polynomial1D curveY;
             BoundaryNode **nodes;
+
             BoundaryElement();
+            BoundaryElement(BoundaryNode *node1, BoundaryNode *node2, BoundaryNode *node3);
+
+            void draw(void);
     };
 }
 #endif // BOUNDARYELEMENT_H

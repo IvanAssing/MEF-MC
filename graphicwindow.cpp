@@ -1,5 +1,7 @@
 #include "graphicwindow.h"
 
+#include <mesh.h>
+
 GraphicWindow::GraphicWindow(QWidget *parent) :
     QGLWidget(parent)
 {
@@ -8,6 +10,25 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     ymin = -10.;
     xmax = +10.;
     ymax = +10.;
+
+    mesh = new MC::Mesh(-2.0, -4.0, .9, 15, 10);
+
+    double points[24]={
+        0.0, 0.0,
+        1.0, -1.0,
+        3.0, -2.0,
+        6.0, -2.0,
+        9.0, -2.0,
+        10.0, -1.0,
+        10.5, 0.0,
+        10.0, 1.0,
+        9.0, 2.0,
+        6.0, 2.0,
+        3.0, 2.0,
+        1.0, 1.0
+    };
+
+    mesh->addBoundaryNodes(12, points);
 
 }
 
@@ -142,7 +163,7 @@ void GraphicWindow::mouseMoveEvent(QMouseEvent *event)
 
 
 
-        updateGL();
+    updateGL();
 
 }
 
@@ -160,24 +181,8 @@ void GraphicWindow::paintGL()
     //double ddx = 1.75 * (max_.x() - min_.x()) * d_x;
     //double ddy = 1.75 * (max_.y() - min_.y()) * d_y;
 
+    mesh->draw();
 
-
-    glLineWidth(0.5);
-    glColor3d(0.0, 1.0, 0.0);
-    double dx = 1.;
-    glBegin(GL_LINES);{
-        for(double ix=-1000.; ix<=1000.; ix+=dx){
-            glVertex3d(ix, -1000., 0.);
-            glVertex3d(ix, 1000., 0.);
-        }
-
-        for(double iy=-1000.; iy<=1000.; iy+=dx){
-
-            glVertex3d(-1000., iy, 0.);
-            glVertex3d(1000., iy, 0.);
-        }
-    }
-    glEnd();
 
 
 }

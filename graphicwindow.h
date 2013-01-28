@@ -5,6 +5,8 @@
 #include <QMouseEvent>
 #include <QCursor>
 
+#include <mesh.h>
+
 class GraphicWindow : public QGLWidget
 {
         Q_OBJECT
@@ -13,6 +15,8 @@ class GraphicWindow : public QGLWidget
 
         double xmax, xmin, ymax, ymin, panX, panY;
         bool isMousePress;
+
+        MC::Mesh *mesh;
         
     signals:
         

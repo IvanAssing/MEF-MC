@@ -1,17 +1,24 @@
 #ifndef BOUNDARYNODE_H
 #define BOUNDARYNODE_H
 
-namespace MC{
-class BoundaryNode
-{
-public:
-    double x;
-    double y;
-    int index;
+#include "graphic.h"
 
-    BoundaryNode();
-    BoundaryNode(int index, double x, double y);
-};
+namespace MC
+{
+    class BoundaryNode : public Graphic
+    {
+        public:
+            int index;
+            double x;
+            double y;
+
+
+            BoundaryNode();
+            BoundaryNode(int index, double x, double y);
+
+            void draw(void);
+
+    };
 }
 
 #endif // BOUNDARYNODE_H
