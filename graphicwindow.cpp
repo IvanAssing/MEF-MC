@@ -133,6 +133,12 @@ void GraphicWindow::mouseReleaseEvent(QMouseEvent *event)
     isMousePress = false;
 }
 
+void GraphicWindow::mouseDoubleClickEvent(QMouseEvent *event)
+{
+
+}
+
+
 void GraphicWindow::mouseMoveEvent(QMouseEvent *event)
 {
     if(event->buttons() == Qt::LeftButton)

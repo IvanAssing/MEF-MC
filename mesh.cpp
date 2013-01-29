@@ -101,7 +101,7 @@ void MC::Mesh::createMesh(void)
     Element *currentElement;
 
 
-    //while(indexBoundaryElement == 0){
+    while(indexBoundaryElement == 0){
 
         getFirstElementPosition(boundaryElements[indexBoundaryElement],
                                 &index1, &index2, edge);
@@ -118,12 +118,12 @@ void MC::Mesh::createMesh(void)
         currentElement = grid[index1][index2];
 
         currentElement->setEdges(edge);
+        indexBoundaryElement++;
 
 
 
 
-
-    //}
+    }
 
 
 
