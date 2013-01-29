@@ -1,6 +1,10 @@
 #include "graphicwindow.h"
 
 #include <mesh.h>
+#include <QImage>
+#include <QString>
+#include <QImageWriter>
+#include <QDateTime>
 
 GraphicWindow::GraphicWindow(QWidget *parent) :
     QGLWidget(parent)
@@ -135,6 +139,14 @@ void GraphicWindow::mouseReleaseEvent(QMouseEvent *event)
 
 void GraphicWindow::mouseDoubleClickEvent(QMouseEvent *event)
 {
+    QDateTime now = QDateTime::currentDateTime();
+
+    QString filename = QString("mef-mc-snapshot-")
+            + now.toString("yyyyMMddhhmmsszzz") + QString(".jpg");
+
+    this->updateGL();
+
+    this->grabFrameBuffer(true).save(filename, "JPG", 100);
 
 }
 
