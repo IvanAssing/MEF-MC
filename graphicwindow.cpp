@@ -30,6 +30,8 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
 
     mesh->addBoundaryNodes(12, points);
 
+    mesh->createMesh();
+
 }
 
 

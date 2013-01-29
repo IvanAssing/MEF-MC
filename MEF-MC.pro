@@ -25,7 +25,8 @@ SOURCES += main.cpp\
     polynomial2d.cpp \
     functor2d.cpp \
     graphicwindow.cpp \
-    graphic.cpp
+    graphic.cpp \
+    boundaryintersection.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -37,6 +38,7 @@ HEADERS  += mainwindow.h \
     polynomial2d.h \
     functor2d.h \
     graphicwindow.h \
-    graphic.h
+    graphic.h \
+    boundaryintersection.h
 
 FORMS    += mainwindow.ui

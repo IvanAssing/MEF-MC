@@ -38,6 +38,9 @@ void MC::Mesh::draw(void)
     }
     glEnd();
 
+    for(int i=0; i<nElements; i++)
+        elements[i]->draw();
+
     for(int i=0; i<nBoundaryElements; i++)
         boundaryElements[i]->draw();
 
@@ -80,11 +83,11 @@ void MC::Mesh::createMesh(void)
         grid[i] = new Element*[n2];
 
     for(int i=0; i<n1; i++)
-        for(int j=0; j<n1; j++)
+        for(int j=0; j<n2; j++)
             grid[i][j] = NULL;
 
     elements = new Element*[n1*n2];
-
+    nElements = 0;
 
     double edge[4];
 
@@ -93,15 +96,34 @@ void MC::Mesh::createMesh(void)
 
     int indexBoundaryElement = 0;
     int indexFirstElement = 0;
+    int indexElement = 0;
+
+    Element *currentElement;
 
 
-    while(indexBoundaryElement = nBoundaryElements){
+    //while(indexBoundaryElement == 0){
 
         getFirstElementPosition(boundaryElements[indexBoundaryElement],
                                 &index1, &index2, edge);
 
+        if(grid[index1][index2] == NULL){
+            elements[nElements] = new Element(nElements);
+            indexElement = nElements++;
+            grid[index1][index2] = elements[indexElement];
+        }
+        else{
+            indexElement = grid[index1][index2]->index;
+        }
 
-    }
+        currentElement = grid[index1][index2];
+
+        currentElement->setEdges(edge);
+
+
+
+
+
+    //}
 
 
 
