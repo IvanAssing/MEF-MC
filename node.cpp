@@ -5,8 +5,8 @@ MC::Node::Node()
 }
 
 
-MC::Node::Node(int index, double x, double y)
-  :index(index), x(x), y(y)
+MC::Node::Node(int index_, double x_, double y_)
+  :index(index_), x(x_), y(y_)
 {
 
 }

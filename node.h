@@ -1,17 +1,19 @@
 #ifndef NODE_H
 #define NODE_H
 
-namespace MC{
-class Node
+namespace MC
 {
-public:
-    double x;
-    double y;
-    int index;
+    class Node
+    {
+        public:
+            int index;
+            double x;
+            double y;
 
-    Node();
-    Node(int index, double x, double y);
-};
+
+            Node();
+            Node(int index, double x, double y);
+    };
 }
 
 #endif // NODE_H

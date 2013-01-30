@@ -7,7 +7,8 @@ namespace MC
 {
     class Polynomial1D
     {
-        private:
+        //private:
+        public:
             double *an;
             int n;
 

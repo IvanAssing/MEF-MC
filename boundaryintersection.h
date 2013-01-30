@@ -3,10 +3,11 @@
 
 #include "boundaryelement.h"
 #include "polynomial1d.h"
+#include "graphic.h"
 
 namespace MC
 {
-    class BoundaryIntersection
+    class BoundaryIntersection : public Graphic
     {
         public:
             BoundaryElement *element;
@@ -15,6 +16,8 @@ namespace MC
 
             BoundaryIntersection();
             BoundaryIntersection(BoundaryElement *element, double ksi, int edge);
+
+            void draw(void);
     };
 }
 

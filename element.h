@@ -19,6 +19,8 @@ namespace MC
 
             void setEdges(double *edges);
             void draw(void);
+            bool findIntersection(BoundaryElement *boundaryElement);
+            static int normalizeEdge(int edge);
     };
 }
 #endif // ELEMENT_H

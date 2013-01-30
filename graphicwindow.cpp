@@ -1,6 +1,7 @@
 #include "graphicwindow.h"
 
 #include <mesh.h>
+#include <cmath>
 #include <QImage>
 #include <QString>
 #include <QImageWriter>
@@ -10,29 +11,60 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     QGLWidget(parent)
 {
 
-    xmin = -10.;
-    ymin = -10.;
-    xmax = +10.;
-    ymax = +10.;
+    xmin = -100.;
+    ymin = -100.;
+    xmax = +100.;
+    ymax = +100.;
 
-    mesh = new MC::Mesh(-2.0, -4.0, .9, 15, 10);
+    mesh = new MC::Mesh(-125., -125., 10., 24, 24);
 
-    double points[24]={
-        0.0, 0.0,
-        1.0, -1.0,
-        3.0, -2.0,
-        6.0, -2.0,
-        9.0, -2.0,
-        10.0, -1.0,
-        10.5, 0.0,
-        10.0, 1.0,
-        9.0, 2.0,
-        6.0, 2.0,
-        3.0, 2.0,
-        1.0, 1.0
-    };
+    double points[128];
 
-    mesh->addBoundaryNodes(12, points);
+    double DtoR = M_PI/180.;
+    double ri = 74.5;
+
+
+    double r[10] = {76.0, 80.0, 90.0, 100.0, 100.0, 100.0, 90.0, 80.0, 76.0, ri};
+    double b[10] = {3.7, 7.5, 7.5, 7.5, 22.5, 37.5, 37.5, 37.5, 41.3, 45.0};
+
+    double alpha;
+    int k=0;
+
+    points[k++] = 0.0;
+    points[k++] = 0.0;
+    points[k++] = ri/2.0;
+    points[k++] = 0.0;
+    points[k++] = ri;
+    points[k++] = 0.0;
+
+
+    for(int i=0; i<6; i++){
+        alpha = i*45.0*DtoR;
+        for(int j=0; j<10; j++){
+            points[k++] = r[j]*cos(alpha+b[j]*DtoR);
+            points[k++] = r[j]*sin(alpha+b[j]*DtoR);
+        }
+    }
+
+    points[k++] = 0.0;
+    points[k++] = -ri/2.0;
+
+//    double points[24]={
+//        0.0, 0.0,
+//        1.0, -1.0,
+//        3.0, -2.0,
+//        6.0, -2.0,
+//        9.0, -2.0,
+//        10.0, -1.0,
+//        10.5, 0.0,
+//        10.0, 1.0,
+//        9.0, 2.0,
+//        6.0, 2.0,
+//        3.0, 2.0,
+//        1.0, 1.0
+//    };
+
+    mesh->addBoundaryNodes(64, points);
 
     mesh->createMesh();
 

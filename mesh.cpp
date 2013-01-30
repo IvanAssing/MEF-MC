@@ -6,15 +6,15 @@ MC::Mesh::Mesh()
 {
 }
 
-MC::Mesh::Mesh(double origin1, double origin2, double h12, double n1, double n2)
-    :origin1(origin1), origin2(origin2), h12(h12), n1(n1), n2(n2)
+MC::Mesh::Mesh(double origin1_, double origin2_, double h12_, double n1_, double n2_)
+    :origin1(origin1_), origin2(origin2_), h12(h12_), n1(n1_), n2(n2_)
 {
 
 }
 
 void MC::Mesh::draw(void)
 {
-    glColor4d(0.5, 0.5, 0.5, 0.6);
+    glColor4d(0.9, 0.9, 0.9, 0.9);
     glLineWidth(0.5f);
 
     glBegin(GL_LINES);
@@ -44,6 +44,10 @@ void MC::Mesh::draw(void)
     for(int i=0; i<nBoundaryElements; i++)
         boundaryElements[i]->draw();
 
+    for(int i=0; i<nElements; i++)
+        if(elements[i]->intersections[0].element != NULL)
+            elements[i]->intersections[0].draw();
+
     glColor4d(1.0, 0.0, 0.0, 1.0);
     glPointSize(5.0f);
     for(int i=0; i<nBoundaryNodes; i++)
@@ -71,7 +75,7 @@ void MC::Mesh::addBoundaryNodes(int n, double *points)
 
     boundaryElements[nBoundaryElements-1] =
             new MC::BoundaryElement(boundaryNodes[nBoundaryNodes-2],
-                                    boundaryNodes[nBoundaryNodes-1], boundaryNodes[0]);
+            boundaryNodes[nBoundaryNodes-1], boundaryNodes[0]);
 
 }
 
@@ -100,11 +104,15 @@ void MC::Mesh::createMesh(void)
 
     Element *currentElement;
 
+    getFirstElementPosition(boundaryElements[indexBoundaryElement],
+                            &index1, &index2, edge);
 
-    while(indexBoundaryElement == 0){
+    int temp = 0;
 
-        getFirstElementPosition(boundaryElements[indexBoundaryElement],
-                                &index1, &index2, edge);
+    BoundaryIntersection inputIntersection;
+
+    while(temp < 30){
+
 
         if(grid[index1][index2] == NULL){
             elements[nElements] = new Element(nElements);
@@ -117,8 +125,29 @@ void MC::Mesh::createMesh(void)
 
         currentElement = grid[index1][index2];
 
+        currentElement->intersections[0] = inputIntersection;
+
         currentElement->setEdges(edge);
-        indexBoundaryElement++;
+
+        if(!currentElement->findIntersection(boundaryElements[indexBoundaryElement])){
+            indexBoundaryElement++;
+            //break;
+        }
+
+        inputIntersection = currentElement->intersections[1];
+        inputIntersection.edge = MC::Element::normalizeEdge(inputIntersection.edge + 2);
+
+        switch(currentElement->intersections[1].edge)
+        {
+
+            case 0 : { edge[2] = edge[0] , edge[0] -= this->h12 , index2 -= 1; break; }
+            case 1 : { edge[3] = edge[1] , edge[1] += this->h12 , index1 += 1; break; }
+            case 2 : { edge[0] = edge[2] , edge[2] += this->h12 , index2 += 1; break; }
+            case 3 : { edge[1] = edge[3] , edge[3] -= this->h12 , index1 -= 1; break; }
+
+        }
+
+        temp++;
 
 
 
@@ -137,9 +166,11 @@ void MC::Mesh::getFirstElementPosition(MC::BoundaryElement *element, int *index1
     *index1 = (int) floor((element->nodes[0]->x - origin1)/h12);
     *index2 = (int) floor((element->nodes[0]->y - origin2)/h12);
 
-    edges[1] = *index1*h12+origin1; // x0
-    edges[3] = (*index1+1)*h12+origin1; // x1
+    edges[3] = *index1*h12+origin1; // x1
+    edges[1] = (*index1+1)*h12+origin1; // x0
 
     edges[0] = *index2*h12+origin2; // y0
     edges[2] = (*index2+1)*h12+origin2; // y1
 }
+
+
