@@ -16,7 +16,7 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     xmax = +100.;
     ymax = +100.;
 
-    mesh = new MC::Mesh(-125., -125., 10., 24, 24);
+    mesh = new MC::Mesh(-125, -125, 12, 24, 24);
 
     double points[128];
 
@@ -174,11 +174,11 @@ void GraphicWindow::mouseDoubleClickEvent(QMouseEvent *event)
     QDateTime now = QDateTime::currentDateTime();
 
     QString filename = QString("mef-mc-snapshot-")
-            + now.toString("yyyyMMddhhmmsszzz") + QString(".jpg");
+            + now.toString("yyyyMMddhhmmsszzz") + QString(".png");
 
     this->updateGL();
 
-    this->grabFrameBuffer(true).save(filename, "JPG", 100);
+    this->grabFrameBuffer(true).save(filename, "PNG", 100);
 
 }
 
