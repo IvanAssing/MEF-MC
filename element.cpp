@@ -1,7 +1,7 @@
 #include "element.h"
 #include <cmath>
 
-#define INTERSECTION_TOL 1.e-15
+#define INTERSECTION_TOL 1.e-10
 #define INVALID_KSI 10.0
 
 
@@ -61,19 +61,19 @@ bool MC::Element::findIntersection(MC::BoundaryElement *boundaryElement)
     double ksi1 = INVALID_KSI;
     double ksi2 = INVALID_KSI;
 
-    if(this->intersections[0].element != NULL)
-        indexEdge = normalizeEdge(this->intersections[0].edge + 2);
+    //if(this->intersections[0].element != NULL)
+    indexEdge = normalizeEdge(this->intersections[0].edge + 2);
 
     double a, b, c, df=INTERSECTION_TOL;
 
     MC::Polynomial1D functionP, functionI;
 
-    for(int i=0; i<3 && (ksi1 == INVALID_KSI && ksi2 == INVALID_KSI); i++, indexEdge++){
+    for(int i=0; i<4 /*&& (ksi1 == INVALID_KSI && ksi2 == INVALID_KSI)*/; i++, indexEdge++){
 
         indexEdge = normalizeEdge(indexEdge);
 
-        if(indexEdge == this->intersections[0].edge)
-            indexEdge = normalizeEdge(indexEdge+1);
+//        if(indexEdge == this->intersections[0].edge)
+//            indexEdge = normalizeEdge(indexEdge+1);
 
         if(indexEdge % 2 == 0){
             functionP = boundaryElement->curveY;
@@ -144,16 +144,23 @@ bool MC::Element::findIntersection(MC::BoundaryElement *boundaryElement)
                 ksi2 = INVALID_KSI;
         }
 
-    }
 
-    if(ksi1+df<=1.0 && ksi1-df>=-1.0){
-        this->intersections[1] = MC::BoundaryIntersection(boundaryElement, ksi1, indexEdge-1);
-        return true;
-    }
 
-    if(ksi2+df<=1.0 && ksi2-df>=-1.0){
-        this->intersections[1] = MC::BoundaryIntersection(boundaryElement, ksi2, indexEdge-1);
-        return true;
+        if(ksi1 != INVALID_KSI && ksi2!= INVALID_KSI)
+        {
+            df = 0; // somente teste
+        }
+
+        if(ksi1+df<=1.0 && ksi1-df>=-1.0 && fabs(ksi1-this->intersections[0].ksi)>INTERSECTION_TOL){
+            this->intersections[1] = MC::BoundaryIntersection(boundaryElement, ksi1, indexEdge);
+            return true;
+        }
+
+        if(ksi2+df<=1.0 && ksi2-df>=-1.0 && fabs(ksi2-this->intersections[0].ksi)>INTERSECTION_TOL){
+            this->intersections[1] = MC::BoundaryIntersection(boundaryElement, ksi2, indexEdge);
+            return true;
+        }
+
     }
 
 

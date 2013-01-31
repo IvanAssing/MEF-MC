@@ -16,7 +16,11 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     xmax = +100.;
     ymax = +100.;
 
-    mesh = new MC::Mesh(-125, -125, 12, 24, 24);
+    double h = 10;
+
+    mesh = new MC::Mesh(-125, -125,  h, 250/h, 250/h);
+    //mesh = new MC::Mesh(-125, -125, .12, 2400, 2400);
+    //mesh = new MC::Mesh(-125, -125, h, 250/h, 250/h);
 
     double points[128];
 

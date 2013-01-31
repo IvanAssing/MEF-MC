@@ -114,13 +114,13 @@ void MC::Mesh::createMesh(void)
     getFirstElementPosition(boundaryElements[indexBoundaryElement],
                             &index1, &index2, edge);
 
+
     int temp = 0;
 
-    BoundaryIntersection inputIntersection;
+    BoundaryIntersection inputIntersection = MC::BoundaryIntersection(boundaryElements[0], 10., 0);
 
-    while(temp < 84){
+    for(int i = 0; i<n1*n2, indexBoundaryElement<nBoundaryElements; i++){
 
-inicio:
 
         if(grid[index1][index2] == NULL){
             elements[nElements] = new Element(nElements);
@@ -144,7 +144,7 @@ inicio:
 
         if(!currentElement->findIntersection(boundaryElements[indexBoundaryElement])){
             indexBoundaryElement++;
-            goto inicio;
+            continue;
         }
 
         inputIntersection = currentElement->intersections[1];
@@ -152,19 +152,11 @@ inicio:
 
         switch(currentElement->intersections[1].edge)
         {
-
             case 0 : { edge[2] = edge[0] , edge[0] -= this->h12 , index2 -= 1; break; }
             case 1 : { edge[3] = edge[1] , edge[1] += this->h12 , index1 += 1; break; }
             case 2 : { edge[0] = edge[2] , edge[2] += this->h12 , index2 += 1; break; }
             case 3 : { edge[1] = edge[3] , edge[3] -= this->h12 , index1 -= 1; break; }
-
         }
-
-        temp++;
-
-
-
-
     }
 
 
