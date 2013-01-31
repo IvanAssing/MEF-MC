@@ -47,14 +47,24 @@ void MC::Mesh::draw(void)
     glColor4d(1.0, 1.0, 1.0, 0.5);
     glPointSize(16.f);
     for(int i=0; i<nElements; i++)
+    {
         if(elements[i]->intersections[0].element != NULL)
             elements[i]->intersections[0].draw();
+
+//        if(elements[i]->nIntersections > 2)
+//            elements[i]->intersections[2].draw();
+    }
 
     glColor4d(0.0, 0.0, 0.0, 0.5);
     glPointSize(8.f);
     for(int i=0; i<nElements; i++)
+    {
         if(elements[i]->intersections[1].element != NULL)
             elements[i]->intersections[1].draw();
+
+//        if(elements[i]->nIntersections > 2)
+//            elements[i]->intersections[3].draw();
+    }
 
     glColor4d(1.0, 0.0, 0.0, 1.0);
     glPointSize(5.0f);
@@ -117,9 +127,11 @@ void MC::Mesh::createMesh(void)
 
     int temp = 0;
 
+    bool flag = true;
+
     BoundaryIntersection inputIntersection = MC::BoundaryIntersection(boundaryElements[0], 10., 0);
 
-    for(int i = 0; i<n1*n2, indexBoundaryElement<nBoundaryElements; i++){
+    for(int i = 0; i<n1*n2 && indexBoundaryElement<nBoundaryElements; i++){
 
 
         if(grid[index1][index2] == NULL){
@@ -133,7 +145,10 @@ void MC::Mesh::createMesh(void)
 
         currentElement = grid[index1][index2];
 
-        currentElement->intersections[0] = inputIntersection;
+        if(flag)
+            currentElement->setIntersection(MC::Input, inputIntersection);
+        else
+            flag = true;
 
         currentElement->setEdges(edge);
 
@@ -144,13 +159,14 @@ void MC::Mesh::createMesh(void)
 
         if(!currentElement->findIntersection(boundaryElements[indexBoundaryElement])){
             indexBoundaryElement++;
+            flag = false;
             continue;
         }
 
-        inputIntersection = currentElement->intersections[1];
+        inputIntersection = currentElement->intersections[currentElement->nIntersections-1];
         inputIntersection.edge = MC::Element::normalizeEdge(inputIntersection.edge + 2);
 
-        switch(currentElement->intersections[1].edge)
+        switch(currentElement->intersections[currentElement->nIntersections-1].edge)
         {
             case 0 : { edge[2] = edge[0] , edge[0] -= this->h12 , index2 -= 1; break; }
             case 1 : { edge[3] = edge[1] , edge[1] += this->h12 , index1 += 1; break; }

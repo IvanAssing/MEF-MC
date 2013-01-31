@@ -7,6 +7,11 @@
 
 namespace MC
 {
+    enum TypeIntersection{
+        Input,
+        Output
+    };
+
     class BoundaryIntersection : public Graphic
     {
         public:

@@ -15,7 +15,7 @@ MC::Element::Element(int index_):index(index_)
 
     adjacentElements = new Element*[4];
 
-    intersections = new BoundaryIntersection[2];
+    nIntersections = 0;
 }
 
 void MC::Element::setEdges(double *edges_)
@@ -62,7 +62,7 @@ bool MC::Element::findIntersection(MC::BoundaryElement *boundaryElement)
     double ksi2 = INVALID_KSI;
 
     //if(this->intersections[0].element != NULL)
-    indexEdge = normalizeEdge(this->intersections[0].edge + 2);
+    indexEdge = normalizeEdge(this->intersections[nIntersections-2].edge + 2);
 
     double a, b, c, df=INTERSECTION_TOL;
 
@@ -72,8 +72,8 @@ bool MC::Element::findIntersection(MC::BoundaryElement *boundaryElement)
 
         indexEdge = normalizeEdge(indexEdge);
 
-//        if(indexEdge == this->intersections[0].edge)
-//            indexEdge = normalizeEdge(indexEdge+1);
+        //        if(indexEdge == this->intersections[0].edge)
+        //            indexEdge = normalizeEdge(indexEdge+1);
 
         if(indexEdge % 2 == 0){
             functionP = boundaryElement->curveY;
@@ -146,18 +146,18 @@ bool MC::Element::findIntersection(MC::BoundaryElement *boundaryElement)
 
 
 
-        if(ksi1 != INVALID_KSI && ksi2!= INVALID_KSI)
+        if(ksi1!= INVALID_KSI && ksi2!= INVALID_KSI)
         {
             df = 0; // somente teste
         }
 
-        if(ksi1+df<=1.0 && ksi1-df>=-1.0 && fabs(ksi1-this->intersections[0].ksi)>INTERSECTION_TOL){
-            this->intersections[1] = MC::BoundaryIntersection(boundaryElement, ksi1, indexEdge);
+        if(ksi1+df<=1.0 && ksi1-df>=-1.0 && fabs(ksi1-this->intersections[nIntersections-2].ksi)>INTERSECTION_TOL){
+            this->setIntersection(MC::Output, MC::BoundaryIntersection(boundaryElement, ksi1, indexEdge));
             return true;
         }
 
-        if(ksi2+df<=1.0 && ksi2-df>=-1.0 && fabs(ksi2-this->intersections[0].ksi)>INTERSECTION_TOL){
-            this->intersections[1] = MC::BoundaryIntersection(boundaryElement, ksi2, indexEdge);
+        if(ksi2+df<=1.0 && ksi2-df>=-1.0 && fabs(ksi2-this->intersections[nIntersections-2].ksi)>INTERSECTION_TOL){
+            this->setIntersection(MC::Output,MC::BoundaryIntersection(boundaryElement, ksi2, indexEdge));
             return true;
         }
 
@@ -171,4 +171,73 @@ bool MC::Element::findIntersection(MC::BoundaryElement *boundaryElement)
 int MC::Element::normalizeEdge(int edge)
 {
     return (edge+16)%4;
+}
+
+void MC::Element::setIntersection(MC::TypeIntersection type_, BoundaryIntersection intersection_)
+{
+    if(type_ == MC::Output){
+
+        if(nIntersections == 0){
+            intersections = new MC::BoundaryIntersection[2];
+            nIntersections = 2;
+
+            intersections[1] = intersection_;
+
+            return;
+        }
+        else if(intersections[1].element == NULL){
+            intersections[1] = intersection_;
+
+            return;
+        }
+        else{
+            MC::BoundaryIntersection copy0 = intersections[0];
+            MC::BoundaryIntersection copy1 = intersections[1];
+
+            delete intersections;
+            intersections = new MC::BoundaryIntersection[4];
+            nIntersections = 4;
+
+            intersections[0] = copy0;
+            intersections[1] = copy1;
+
+            intersections[3] = intersection_;
+
+            return;
+        }
+
+    }
+
+    if(type_ == MC::Input){
+
+        if(nIntersections == 0){
+            intersections = new MC::BoundaryIntersection[2];
+            nIntersections = 2;
+
+            intersections[0] = intersection_;
+
+            return;
+        }
+        else if(intersections[0].element == NULL){
+            intersections[0] = intersection_;
+
+            return;
+        }
+        else{
+            MC::BoundaryIntersection copy0 = intersections[0];
+            MC::BoundaryIntersection copy1 = intersections[1];
+
+            delete intersections;
+            intersections = new MC::BoundaryIntersection[4];
+            nIntersections = 4;
+
+            intersections[0] = copy0;
+            intersections[1] = copy1;
+
+            intersections[2] = intersection_;
+
+            return;
+        }
+
+    }
 }

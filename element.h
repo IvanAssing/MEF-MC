@@ -13,6 +13,7 @@ namespace MC
             double *edges;
             Element **adjacentElements;
             BoundaryIntersection *intersections;
+            int nIntersections;
 
             Element();
             Element(int index);
@@ -21,6 +22,7 @@ namespace MC
             void draw(void);
             bool findIntersection(BoundaryElement *boundaryElement);
             static int normalizeEdge(int edge);
+            void setIntersection(TypeIntersection type, BoundaryIntersection intersection);
     };
 }
 #endif // ELEMENT_H

@@ -3,6 +3,8 @@
 MC::BoundaryIntersection::BoundaryIntersection()
 {
     element = NULL;
+    ksi = 10;
+    edge = 0;
 }
 
 MC::BoundaryIntersection::BoundaryIntersection(BoundaryElement *element_, double ksi_, int edge_)
