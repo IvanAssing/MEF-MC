@@ -44,9 +44,17 @@ void MC::Mesh::draw(void)
     for(int i=0; i<nBoundaryElements; i++)
         boundaryElements[i]->draw();
 
+    glColor4d(1.0, 1.0, 1.0, 0.5);
+    glPointSize(16.f);
     for(int i=0; i<nElements; i++)
         if(elements[i]->intersections[0].element != NULL)
             elements[i]->intersections[0].draw();
+
+    glColor4d(0.0, 0.0, 0.0, 0.5);
+    glPointSize(8.f);
+    for(int i=0; i<nElements; i++)
+        if(elements[i]->intersections[1].element != NULL)
+            elements[i]->intersections[1].draw();
 
     glColor4d(1.0, 0.0, 0.0, 1.0);
     glPointSize(5.0f);
@@ -76,7 +84,6 @@ void MC::Mesh::addBoundaryNodes(int n, double *points)
     boundaryElements[nBoundaryElements-1] =
             new MC::BoundaryElement(boundaryNodes[nBoundaryNodes-2],
             boundaryNodes[nBoundaryNodes-1], boundaryNodes[0]);
-
 }
 
 
@@ -111,8 +118,9 @@ void MC::Mesh::createMesh(void)
 
     BoundaryIntersection inputIntersection;
 
-    while(temp < 30){
+    while(temp < 84){
 
+inicio:
 
         if(grid[index1][index2] == NULL){
             elements[nElements] = new Element(nElements);
@@ -129,9 +137,14 @@ void MC::Mesh::createMesh(void)
 
         currentElement->setEdges(edge);
 
+        if(temp == 42)
+        {
+            temp = 42;
+        }
+
         if(!currentElement->findIntersection(boundaryElements[indexBoundaryElement])){
             indexBoundaryElement++;
-            //break;
+            goto inicio;
         }
 
         inputIntersection = currentElement->intersections[1];

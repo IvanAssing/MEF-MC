@@ -28,7 +28,7 @@ void MC::Element::setEdges(double *edges_)
 
 void MC::Element::draw(void)
 {
-    glColor4d(0.1, 0.2, 0.8, 0.6);
+    glColor4d(0.9, 0.9, 0.9, 0.6);
 
 
     glBegin(GL_QUADS);
@@ -115,8 +115,11 @@ bool MC::Element::findIntersection(MC::BoundaryElement *boundaryElement)
 
         double fi, f0, f1;
 
-        f0 = edges[normalizeEdge(indexEdge - 1)];
-        f1 = edges[normalizeEdge(indexEdge + 1)];
+        int if0 = normalizeEdge(indexEdge - 1);
+        int if1 = normalizeEdge(indexEdge + 1);
+
+        f0 = edges[if0];
+        f1 = edges[if1];
 
         if(ksi1+df<=1.0 && ksi1-df>=-1.0)
         {
@@ -160,5 +163,5 @@ bool MC::Element::findIntersection(MC::BoundaryElement *boundaryElement)
 
 int MC::Element::normalizeEdge(int edge)
 {
-    return edge%4;
+    return (edge+16)%4;
 }
