@@ -26,7 +26,8 @@ SOURCES += main.cpp\
     functor2d.cpp \
     graphicwindow.cpp \
     graphic.cpp \
-    boundaryintersection.cpp
+    boundaryintersection.cpp \
+    elementedge.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -39,6 +40,7 @@ HEADERS  += mainwindow.h \
     functor2d.h \
     graphicwindow.h \
     graphic.h \
-    boundaryintersection.h
+    boundaryintersection.h \
+    elementedge.h
 
 FORMS    += mainwindow.ui

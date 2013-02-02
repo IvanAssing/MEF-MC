@@ -5,6 +5,7 @@
 #include "boundarynode.h"
 #include "element.h"
 #include "boundaryelement.h"
+#include "elementedge.h"
 
 
 namespace MC
@@ -20,6 +21,7 @@ namespace MC
 
             BoundaryNode **boundaryNodes;
             BoundaryElement **boundaryElements;
+            ElementEdge **elementEdges;
 
             Element ***grid;
             Element **elements;
@@ -28,12 +30,15 @@ namespace MC
             int nBoundaryNodes;
             int nBoundaryElements;
             int nElements;
+            int nElementEdges;
 
             Mesh();
             Mesh(double origin1, double origin2, double h12, double n1, double n2);
             void addBoundaryNodes(int n, double *points);
             void createMesh(void);
+            void createMesh_2(void);
             void getFirstElementPosition(BoundaryElement *element, int *index1, int *index2, double *edges);
+            void getElementIndex(BoundaryElement *element, int *index1, int *index2);
             void draw(void);
     };
 }
