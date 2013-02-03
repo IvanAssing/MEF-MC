@@ -39,6 +39,10 @@ namespace MC
             void createMesh_2(void);
             void getFirstElementPosition(BoundaryElement *element, int *index1, int *index2, double *edges);
             void getElementIndex(BoundaryElement *element, int *index1, int *index2);
+
+            Element* createElement(int index1, int index2);
+            void getEdges(int index1, int index2, double *edges);
+
             void draw(void);
     };
 }

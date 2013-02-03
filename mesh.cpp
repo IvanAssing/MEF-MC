@@ -49,25 +49,25 @@ void MC::Mesh::draw(void)
 
     glColor4d(1.0, 1.0, 1.0, 0.5);
     glPointSize(16.f);
-    for(int i=0; i<nElements; i++)
-    {
-        if(elements[i]->intersections[0].element != NULL)
-            elements[i]->intersections[0].draw();
+//    for(int i=0; i<nElements; i++)
+//    {
+//        if(elements[i]->intersections[0].element != NULL)
+//            elements[i]->intersections[0].draw();
 
-        //        if(elements[i]->nIntersections > 2)
-        //            elements[i]->intersections[2].draw();
-    }
+//        //        if(elements[i]->nIntersections > 2)
+//        //            elements[i]->intersections[2].draw();
+//    }
 
-    glColor4d(0.0, 0.0, 0.0, 0.5);
-    glPointSize(8.f);
-    for(int i=0; i<nElements; i++)
-    {
-        if(elements[i]->intersections[1].element != NULL)
-            elements[i]->intersections[1].draw();
+//    glColor4d(0.0, 0.0, 0.0, 0.5);
+//    glPointSize(8.f);
+//    for(int i=0; i<nElements; i++)
+//    {
+//        if(elements[i]->intersections[1].element != NULL)
+//            elements[i]->intersections[1].draw();
 
-        //        if(elements[i]->nIntersections > 2)
-        //            elements[i]->intersections[3].draw();
-    }
+//        //        if(elements[i]->nIntersections > 2)
+//        //            elements[i]->intersections[3].draw();
+//    }
 
     glColor4d(1.0, 0.0, 0.0, 1.0);
     glPointSize(5.0f);
@@ -232,6 +232,25 @@ inline void findRoot(double a, double b, double c, double *ksi1, double *ksi2)
     }
 }
 
+MC::Element* MC::Mesh::createElement(int index1, int index2)
+{
+    if(grid[index1][index2] == NULL){
+        elements[nElements] = new Element(nElements++);
+        grid[index1][index2] = elements[nElements-1];
+    }
+
+    return grid[index1][index2];
+}
+
+void MC::Mesh::getEdges(int index1, int index2, double *edges)
+{
+    edges[3] = index1*h12+origin1; // x1
+    edges[1] = (index1+1)*h12+origin1; // x0
+
+    edges[0] = index2*h12+origin2; // y0
+    edges[2] = (index2+1)*h12+origin2; // y1
+}
+
 
 void MC::Mesh::createMesh_2(void)
 {
@@ -270,12 +289,12 @@ void MC::Mesh::createMesh_2(void)
 
             if(ksi1+INTERSECTION_TOLERANCE<=1.0 && ksi1-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveY(ksi1) - origin2)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1, 1);
                 notStop = true;
             }
             if(ksi2+INTERSECTION_TOLERANCE<=1.0 && ksi2-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveY(ksi2) - origin2)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2, 1);
                 notStop = true;
             }
 
@@ -289,12 +308,12 @@ void MC::Mesh::createMesh_2(void)
 
             if(ksi1+INTERSECTION_TOLERANCE<=1.0 && ksi1-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveY(ksi1) - origin2)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i+1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(i-1, i, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1, 1);
                 notStop = true;
             }
             if(ksi2+INTERSECTION_TOLERANCE<=1.0 && ksi2-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveY(ksi2) - origin2)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i+1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(i-1, i, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2, 1);
                 notStop = true;
             }
 
@@ -308,12 +327,12 @@ void MC::Mesh::createMesh_2(void)
 
             if(ksi1+INTERSECTION_TOLERANCE<=1.0 && ksi1-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveX(ksi1) - origin1)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i, i-1, boundaryElements[indexBoundaryElement], ksi1, 2);
                 notStop = true;
             }
             if(ksi2+INTERSECTION_TOLERANCE<=1.0 && ksi2-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveX(ksi2) - origin1)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i, i-1, boundaryElements[indexBoundaryElement], ksi2, 2);
                 notStop = true;
             }
 
@@ -327,16 +346,62 @@ void MC::Mesh::createMesh_2(void)
 
             if(ksi1+INTERSECTION_TOLERANCE<=1.0 && ksi1-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveX(ksi1) - origin1)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i, i+1, boundaryElements[indexBoundaryElement], ksi1);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i-1, i, boundaryElements[indexBoundaryElement], ksi1, 2);
                 notStop = true;
             }
             if(ksi2+INTERSECTION_TOLERANCE<=1.0 && ksi2-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveX(ksi2) - origin1)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i, i+1, boundaryElements[indexBoundaryElement], ksi2);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i-1, i, boundaryElements[indexBoundaryElement], ksi2, 2);
                 notStop = true;
             }
         }
     }
+
+    /////////////////////
+    grid = new Element**[n1];
+    for(int i=0; i<n1; i++)
+        grid[i] = new Element*[n2];
+
+    for(int i=0; i<n1; i++)
+        for(int j=0; j<n2; j++)
+            grid[i][j] = NULL;
+
+    elements = new Element*[n1*n2];
+    nElements = 0;
+
+    MC::Element* currentElement;
+    double edges[4];
+
+    for(int i=0; i<nElementEdges; i++){
+
+        index1 = elementEdges[i]->indexH1;
+        index2 = elementEdges[i]->indexV1;
+
+        if(grid[index1][index2] == NULL){
+            elements[nElements] = new Element(nElements);
+            grid[index1][index2] = elements[nElements++];
+
+            getEdges(index1, index2, edges);
+            grid[index1][index2]->setEdges(edges);
+
+        }
+
+        index1 = elementEdges[i]->indexH2;
+        index2 = elementEdges[i]->indexV2;
+
+        if(grid[index1][index2] == NULL){
+            elements[nElements] = new Element(nElements);
+            grid[index1][index2] = elements[nElements++];
+
+
+            getEdges(index1, index2, edges);
+            grid[index1][index2]->setEdges(edges);
+
+        }
+    }
+
+
+
 }
 
 
