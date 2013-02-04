@@ -20,14 +20,20 @@ void MC::ElementEdge::draw(void)
     glColor4f(1.0f, 0.0f, 0.0f, 0.7f);
 
     if(dir == 1){
+        if(indexH1>indexH2) dh = -1.0;
         glBegin(GL_LINES);
-        glVertex2d(element->curveX(ksi)-dh, element->curveY(ksi));
+        glVertex2d(element->curveX(ksi)-dh, element->curveY(ksi)-dh);
+        glVertex2d(element->curveX(ksi)+dh, element->curveY(ksi));
+        glVertex2d(element->curveX(ksi)-dh, element->curveY(ksi)+dh);
         glVertex2d(element->curveX(ksi)+dh, element->curveY(ksi));
         glEnd();
     }
     else{
+        if(indexV1>indexV2) dh = -1.0;
         glBegin(GL_LINES);
-        glVertex2d(element->curveX(ksi), element->curveY(ksi)-dh);
+        glVertex2d(element->curveX(ksi)-dh, element->curveY(ksi)-dh);
+        glVertex2d(element->curveX(ksi), element->curveY(ksi)+dh);
+        glVertex2d(element->curveX(ksi)+dh, element->curveY(ksi)-dh);
         glVertex2d(element->curveX(ksi), element->curveY(ksi)+dh);
         glEnd();
     }
@@ -36,4 +42,20 @@ void MC::ElementEdge::draw(void)
     glBegin(GL_POINTS);
     glVertex2d(element->curveX(ksi), element->curveY(ksi));
     glEnd();
+}
+
+int MC::ElementEdge::getEdgeIndex(void)
+{
+    if(dir == 1){
+        if(indexH1<indexH2)
+            return 1;
+        else
+            return 3;
+    }
+    else{
+        if(indexV1<indexV2)
+            return 2;
+        else
+            return 0;
+    }
 }

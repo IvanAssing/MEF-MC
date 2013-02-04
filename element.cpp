@@ -9,11 +9,17 @@ MC::Element::Element()
 {
 }
 
-MC::Element::Element(int index_):index(index_)
+MC::Element::Element(int index_, int index1_, int index2_):index(index_), index1(index1_), index2(index2_)
 {
     edges = new double[4];
 
     adjacentElements = new Element*[4];
+
+    adjacentElements[0] = NULL;
+    adjacentElements[1] = NULL;
+    adjacentElements[2] = NULL;
+    adjacentElements[3] = NULL;
+
 
     nIntersections = 0;
 }
@@ -49,6 +55,25 @@ void MC::Element::draw(void)
         glVertex3d(edges[1], edges[0], 0.0);
         glVertex3d(edges[1], edges[2], 0.0);
         glVertex3d(edges[3], edges[2], 0.0);
+    }
+    glEnd();
+
+
+    glLineWidth(4.5f);
+    glBegin(GL_LINES);
+    {
+        (adjacentElements[0]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
+        glVertex3d(edges[3], edges[0], 0.0);
+        glVertex3d(edges[1], edges[0], 0.0);
+        (adjacentElements[1]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
+        glVertex3d(edges[1], edges[0], 0.0);
+        glVertex3d(edges[1], edges[2], 0.0);
+        (adjacentElements[2]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
+        glVertex3d(edges[1], edges[2], 0.0);
+        glVertex3d(edges[3], edges[2], 0.0);
+        (adjacentElements[3]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
+        glVertex3d(edges[3], edges[2], 0.0);
+        glVertex3d(edges[3], edges[0], 0.0);
     }
     glEnd();
 

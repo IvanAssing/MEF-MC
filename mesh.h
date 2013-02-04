@@ -43,6 +43,9 @@ namespace MC
             Element* createElement(int index1, int index2);
             void getEdges(int index1, int index2, double *edges);
 
+            void setExternalLinks(int index1, int index2, int edge);
+            void setInternalLinks(Element *element);
+
             void draw(void);
     };
 }

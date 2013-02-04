@@ -10,13 +10,15 @@ namespace MC
     {
         public:
             int index;
+            int index1;
+            int index2;
             double *edges;
             Element **adjacentElements;
             BoundaryIntersection *intersections;
             int nIntersections;
 
             Element();
-            Element(int index);
+            Element(int index, int index1, int index2);
 
             void setEdges(double *edges);
             void draw(void);

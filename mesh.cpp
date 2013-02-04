@@ -49,25 +49,25 @@ void MC::Mesh::draw(void)
 
     glColor4d(1.0, 1.0, 1.0, 0.5);
     glPointSize(16.f);
-//    for(int i=0; i<nElements; i++)
-//    {
-//        if(elements[i]->intersections[0].element != NULL)
-//            elements[i]->intersections[0].draw();
+    //    for(int i=0; i<nElements; i++)
+    //    {
+    //        if(elements[i]->intersections[0].element != NULL)
+    //            elements[i]->intersections[0].draw();
 
-//        //        if(elements[i]->nIntersections > 2)
-//        //            elements[i]->intersections[2].draw();
-//    }
+    //        //        if(elements[i]->nIntersections > 2)
+    //        //            elements[i]->intersections[2].draw();
+    //    }
 
-//    glColor4d(0.0, 0.0, 0.0, 0.5);
-//    glPointSize(8.f);
-//    for(int i=0; i<nElements; i++)
-//    {
-//        if(elements[i]->intersections[1].element != NULL)
-//            elements[i]->intersections[1].draw();
+    //    glColor4d(0.0, 0.0, 0.0, 0.5);
+    //    glPointSize(8.f);
+    //    for(int i=0; i<nElements; i++)
+    //    {
+    //        if(elements[i]->intersections[1].element != NULL)
+    //            elements[i]->intersections[1].draw();
 
-//        //        if(elements[i]->nIntersections > 2)
-//        //            elements[i]->intersections[3].draw();
-//    }
+    //        //        if(elements[i]->nIntersections > 2)
+    //        //            elements[i]->intersections[3].draw();
+    //    }
 
     glColor4d(1.0, 0.0, 0.0, 1.0);
     glPointSize(5.0f);
@@ -144,7 +144,7 @@ void MC::Mesh::createMesh(void)
 
 
         if(grid[index1][index2] == NULL){
-            elements[nElements] = new Element(nElements);
+            elements[nElements] = new Element(nElements, index1, index2);
             indexElement = nElements++;
             grid[index1][index2] = elements[indexElement];
         }
@@ -235,7 +235,7 @@ inline void findRoot(double a, double b, double c, double *ksi1, double *ksi2)
 MC::Element* MC::Mesh::createElement(int index1, int index2)
 {
     if(grid[index1][index2] == NULL){
-        elements[nElements] = new Element(nElements++);
+        elements[nElements] = new Element(nElements++, index1, index2);
         grid[index1][index2] = elements[nElements-1];
     }
 
@@ -372,13 +372,13 @@ void MC::Mesh::createMesh_2(void)
     MC::Element* currentElement;
     double edges[4];
 
-    for(int i=0; i<nElementEdges; i++){
+    for(int i=0; i<45/*nElementEdges*/; i++){
 
         index1 = elementEdges[i]->indexH1;
         index2 = elementEdges[i]->indexV1;
 
         if(grid[index1][index2] == NULL){
-            elements[nElements] = new Element(nElements);
+            elements[nElements] = new Element(nElements, index1, index2);
             grid[index1][index2] = elements[nElements++];
 
             getEdges(index1, index2, edges);
@@ -390,7 +390,7 @@ void MC::Mesh::createMesh_2(void)
         index2 = elementEdges[i]->indexV2;
 
         if(grid[index1][index2] == NULL){
-            elements[nElements] = new Element(nElements);
+            elements[nElements] = new Element(nElements, index1, index2);
             grid[index1][index2] = elements[nElements++];
 
 
@@ -398,10 +398,121 @@ void MC::Mesh::createMesh_2(void)
             grid[index1][index2]->setEdges(edges);
 
         }
+
+        int edgeIndex = elementEdges[i]->getEdgeIndex();
+
+        grid[elementEdges[i]->indexH1][elementEdges[i]->indexV1]->adjacentElements[edgeIndex] =
+                grid[elementEdges[i]->indexH2][elementEdges[i]->indexV2];
+        grid[elementEdges[i]->indexH2][elementEdges[i]->indexV2]->adjacentElements[MC::Element::normalizeEdge(edgeIndex+2)] =
+                grid[elementEdges[i]->indexH1][elementEdges[i]->indexV1];
+
+        setExternalLinks(elementEdges[i]->indexH1, elementEdges[i]->indexV1, edgeIndex);
+
+
+
     }
 
-
-
+//    for(int i=0; i<90; i++)
+//        setInternalLinks(elements[i]);
 }
 
 
+
+void MC::Mesh::setExternalLinks(int index1, int index2, int edge)
+{
+    if(edge == 2){
+        if(grid[index1+1][index2] == NULL)
+            grid[index1][index2]->adjacentElements[1] = grid[index1][index2];
+        else{
+            grid[index1][index2]->adjacentElements[1] = grid[index1+1][index2];
+            grid[index1+1][index2]->adjacentElements[3] = grid[index1][index2];
+        }
+        if(grid[index1+1][index2+1] == NULL)
+            grid[index1][index2+1]->adjacentElements[1] = grid[index1][index2+1];
+        else{
+            grid[index1][index2+1]->adjacentElements[1] = grid[index1+1][index2+1];
+            grid[index1+1][index2+1]->adjacentElements[3] = grid[index1][index2+1];
+        }
+        return;
+    }
+    if(edge == 1){
+        if(grid[index1][index2-1] == NULL)
+            grid[index1][index2]->adjacentElements[0] = grid[index1][index2];
+        else{
+            grid[index1][index2]->adjacentElements[0] = grid[index1][index2-1];
+            grid[index1][index2-1]->adjacentElements[2] = grid[index1][index2];
+        }
+        if(grid[index1+1][index2-1] == NULL)
+            grid[index1+1][index2]->adjacentElements[0] = grid[index1+1][index2];
+        else{
+            grid[index1+1][index2]->adjacentElements[0] = grid[index1+1][index2-1];
+            grid[index1+1][index2-1]->adjacentElements[2] = grid[index1+1][index2];
+        }
+        return;
+    }
+    if(edge == 0){
+        if(grid[index1-1][index2] == NULL)
+            grid[index1][index2]->adjacentElements[3] = grid[index1][index2];
+        else{
+            grid[index1][index2]->adjacentElements[3] = grid[index1-1][index2];
+            grid[index1-1][index2]->adjacentElements[1] = grid[index1][index2];
+        }
+        if(grid[index1-1][index2-1] == NULL)
+            grid[index1][index2-1]->adjacentElements[3] = grid[index1][index2-1];
+        else{
+            grid[index1][index2-1]->adjacentElements[3] = grid[index1-1][index2-1];
+            grid[index1-1][index2-1]->adjacentElements[1] = grid[index1][index2-1];
+        }
+        return;
+    }
+    if(edge == 3){
+        if(grid[index1][index2+1] == NULL)
+            grid[index1][index2]->adjacentElements[2] = grid[index1][index2];
+        else{
+            grid[index1][index2]->adjacentElements[2] = grid[index1][index2+1];
+            grid[index1][index2+1]->adjacentElements[0] = grid[index1][index2];
+        }
+        if(grid[index1-1][index2+1] == NULL)
+            grid[index1-1][index2]->adjacentElements[2] = grid[index1-1][index2];
+        else{
+            grid[index1-1][index2]->adjacentElements[2] = grid[index1-1][index2+1];
+            grid[index1-1][index2+1]->adjacentElements[0] = grid[index1-1][index2];
+        }
+        return;
+    }
+}
+
+inline void getAdjacentElementIndex(int edge, int *index1, int *index2)
+{
+    switch(edge){
+    case 0 : {--*index2; return;}
+    case 1 : {++*index1; return;}
+    case 2 : {++*index2; return;}
+    case 3 : {--*index1; return;}
+    }
+}
+
+void MC::Mesh::setInternalLinks(MC::Element *element)
+{
+    double edges[4];
+    int index1 = element->index1;
+    int index2 = element->index2;
+
+
+    for(int i=0; i<4; i++){
+        if(element->adjacentElements[i] == NULL){
+            getAdjacentElementIndex(i, &index1, &index2);
+            if(index1<0 || index2<0 || index1>=n1 || index2>=n2) return;
+            if(grid[index1][index2] == NULL){
+                elements[nElements] = new Element(nElements, index1, index2);
+                grid[index1][index2] = elements[nElements++];
+
+                getEdges(index1, index2, edges);
+                grid[index1][index2]->setEdges(edges);
+            }
+
+            element->adjacentElements[i] = grid[index1][index2];
+            grid[index1][index2]->adjacentElements[MC::Element::normalizeEdge(i+2)] = element;
+        }
+    }
+}

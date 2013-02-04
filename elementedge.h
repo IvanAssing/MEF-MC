@@ -22,6 +22,8 @@ class ElementEdge : public Graphic
         ElementEdge();
         ElementEdge(int indexH1, int indexH2, int indexV1, int indexV2, BoundaryElement *element, double ksi, int dir);
 
+        int getEdgeIndex(void);
+
         void draw(void);
 };
 }
