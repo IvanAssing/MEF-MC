@@ -266,3 +266,25 @@ void MC::Element::setIntersection(MC::TypeIntersection type_, BoundaryIntersecti
 
     }
 }
+
+
+void MC::Element::findTriangleDivision(void)
+{
+    double *pts = new double[100];
+
+
+
+
+    pts[0] = intersections[0].element->curveX(intersections[0].ksi);
+    pts[1] = intersections[0].element->curveY(intersections[0].ksi);
+
+    pts[2] = intersections[0].element->curveX(0.5*(intersections[0].ksi+intersections[1].ksi));
+    pts[3] = intersections[0].element->curveY(0.5*(intersections[0].ksi+intersections[1].ksi));
+
+    pts[4] = intersections[1].element->curveX(intersections[1].ksi);
+    pts[5] = intersections[1].element->curveY(intersections[1].ksi);
+
+
+
+}
+

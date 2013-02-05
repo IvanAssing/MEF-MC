@@ -13,6 +13,7 @@ MC::Mesh::Mesh(double origin1_, double origin2_, double h12_, double n1_, double
     :origin1(origin1_), origin2(origin2_), h12(h12_), n1(n1_), n2(n2_)
 {
 
+
 }
 
 void MC::Mesh::draw(void)
@@ -49,25 +50,25 @@ void MC::Mesh::draw(void)
 
     glColor4d(1.0, 1.0, 1.0, 0.5);
     glPointSize(16.f);
-    //    for(int i=0; i<nElements; i++)
-    //    {
-    //        if(elements[i]->intersections[0].element != NULL)
-    //            elements[i]->intersections[0].draw();
+//        for(int i=0; i<nElements; i++)
+//        {
+//            if(elements[i]->intersections[0].element != NULL)
+//                elements[i]->intersections[0].draw();
 
-    //        //        if(elements[i]->nIntersections > 2)
-    //        //            elements[i]->intersections[2].draw();
-    //    }
+//            //        if(elements[i]->nIntersections > 2)
+//            //            elements[i]->intersections[2].draw();
+//        }
 
-    //    glColor4d(0.0, 0.0, 0.0, 0.5);
-    //    glPointSize(8.f);
-    //    for(int i=0; i<nElements; i++)
-    //    {
-    //        if(elements[i]->intersections[1].element != NULL)
-    //            elements[i]->intersections[1].draw();
+//        glColor4d(0.0, 0.0, 0.0, 0.5);
+//        glPointSize(8.f);
+//        for(int i=0; i<nElements; i++)
+//        {
+//            if(elements[i]->intersections[1].element != NULL)
+//                elements[i]->intersections[1].draw();
 
-    //        //        if(elements[i]->nIntersections > 2)
-    //        //            elements[i]->intersections[3].draw();
-    //    }
+//            //        if(elements[i]->nIntersections > 2)
+//            //            elements[i]->intersections[3].draw();
+//        }
 
     glColor4d(1.0, 0.0, 0.0, 1.0);
     glPointSize(5.0f);
@@ -100,6 +101,32 @@ void MC::Mesh::addBoundaryNodes(int n, double *points)
     boundaryElements[nBoundaryElements-1] =
             new MC::BoundaryElement(boundaryNodes[nBoundaryNodes-2],
                                     boundaryNodes[nBoundaryNodes-1], boundaryNodes[0]);
+
+    this->findLimits();
+
+}
+
+void MC::Mesh::findLimits(void)
+{
+    double max1, max2, min1, min2;
+
+    max1 = boundaryNodes[0]->x;
+    min1 = boundaryNodes[0]->x;
+    max2 = boundaryNodes[0]->y;
+    min2 = boundaryNodes[0]->y;
+
+    for(int i=1; i<nBoundaryNodes; i++){
+        if(boundaryNodes[i]->x > max1) max1 = boundaryNodes[i]->x;
+        if(boundaryNodes[i]->x < min1) min1 = boundaryNodes[i]->x;
+        if(boundaryNodes[i]->y > max2) max2 = boundaryNodes[i]->y;
+        if(boundaryNodes[i]->y < min2) min2 = boundaryNodes[i]->y;
+    }
+
+    origin1 = min1 - (max1-min1)*0.1; // 10%
+    origin2 = min2 - (max2-min2)*0.1; // 10%
+
+    n1 = static_cast<int> (1.2*(max1-min1)/h12) + 1;
+    n2 = static_cast<int> (1.2*(max2-min2)/h12) + 1;
 }
 
 
@@ -369,10 +396,12 @@ void MC::Mesh::createMesh_2(void)
     elements = new Element*[n1*n2];
     nElements = 0;
 
-    MC::Element* currentElement;
+    //MC::Element* currentElement;
     double edges[4];
 
-    for(int i=0; i<45/*nElementEdges*/; i++){
+    for(int i=0; i<nElementEdges; i++){
+
+        int edgeIndex = elementEdges[i]->getEdgeIndex();
 
         index1 = elementEdges[i]->indexH1;
         index2 = elementEdges[i]->indexV1;
@@ -383,8 +412,9 @@ void MC::Mesh::createMesh_2(void)
 
             getEdges(index1, index2, edges);
             grid[index1][index2]->setEdges(edges);
-
         }
+
+        grid[index1][index2]->setIntersection(MC::Output, MC::BoundaryIntersection(elementEdges[i]->element, elementEdges[i]->ksi, edgeIndex));
 
         index1 = elementEdges[i]->indexH2;
         index2 = elementEdges[i]->indexV2;
@@ -399,27 +429,40 @@ void MC::Mesh::createMesh_2(void)
 
         }
 
-        int edgeIndex = elementEdges[i]->getEdgeIndex();
+        grid[index1][index2]->setIntersection(MC::Input, MC::BoundaryIntersection(elementEdges[i]->element, elementEdges[i]->ksi, MC::Element::normalizeEdge(edgeIndex+2)));
+
 
         grid[elementEdges[i]->indexH1][elementEdges[i]->indexV1]->adjacentElements[edgeIndex] =
                 grid[elementEdges[i]->indexH2][elementEdges[i]->indexV2];
         grid[elementEdges[i]->indexH2][elementEdges[i]->indexV2]->adjacentElements[MC::Element::normalizeEdge(edgeIndex+2)] =
                 grid[elementEdges[i]->indexH1][elementEdges[i]->indexV1];
 
+
+
         setExternalLinks(elementEdges[i]->indexH1, elementEdges[i]->indexV1, edgeIndex);
+
+
 
 
 
     }
 
-//    for(int i=0; i<90; i++)
-//        setInternalLinks(elements[i]);
+    for(int i=0; i<nElements; i++){
+        if(elements[i]->intersections[0].edge == elements[i]->intersections[1].edge)
+            elements[i]->adjacentElements[MC::Element::normalizeEdge(elements[i]->intersections[0].edge+2)]=
+                    elements[i];
+    }
+
+    for(int i=0; i<nElements; i++)
+        setInternalLinks(elements[i]);
 }
 
 
 
 void MC::Mesh::setExternalLinks(int index1, int index2, int edge)
 {
+
+
     if(edge == 2){
         if(grid[index1+1][index2] == NULL)
             grid[index1][index2]->adjacentElements[1] = grid[index1][index2];

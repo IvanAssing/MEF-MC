@@ -16,9 +16,9 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     xmax = +100.;
     ymax = +100.;
 
-    double h = 1.2;
+    double h = 10;
 
-    mesh = new MC::Mesh(-125, -125,  h, 250/h, 250/h);
+    mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
     //mesh = new MC::Mesh(-125, -125, .12, 2400, 2400);
     //mesh = new MC::Mesh(-125, -125, h, 250/h, 250/h);
 
@@ -71,7 +71,7 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     mesh->addBoundaryNodes(64, points);
 
     //mesh->createMesh();
-        mesh->createMesh_2();
+      mesh->createMesh_2();
 
 }
 

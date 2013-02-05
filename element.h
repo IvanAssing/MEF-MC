@@ -25,6 +25,8 @@ namespace MC
             bool findIntersection(BoundaryElement *boundaryElement);
             static int normalizeEdge(int edge);
             void setIntersection(TypeIntersection type, BoundaryIntersection intersection);
+
+            void findTriangleDivision(void);
     };
 }
 #endif // ELEMENT_H

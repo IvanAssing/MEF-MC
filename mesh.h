@@ -35,6 +35,7 @@ namespace MC
             Mesh();
             Mesh(double origin1, double origin2, double h12, double n1, double n2);
             void addBoundaryNodes(int n, double *points);
+            void findLimits(void);
             void createMesh(void);
             void createMesh_2(void);
             void getFirstElementPosition(BoundaryElement *element, int *index1, int *index2, double *edges);
