@@ -273,17 +273,48 @@ void MC::Element::findTriangleDivision(void)
     double *pts = new double[100];
 
 
+    double pts_vertex[4][2];
+
+    int np = 0;
+
+    pts_vertex[0][0] = edges[1];
+    pts_vertex[0][1] = edges[0];
+    pts_vertex[1][0] = edges[1];
+    pts_vertex[1][1] = edges[2];
+    pts_vertex[2][0] = edges[3];
+    pts_vertex[2][1] = edges[2];
+    pts_vertex[3][0] = edges[3];
+    pts_vertex[3][1] = edges[0];
+
+    pts[np++] = intersections[0].element->curveX(intersections[0].ksi);
+    pts[np++] = intersections[0].element->curveY(intersections[0].ksi);
+
+    if(intersections[0].element == intersections[1].element){
+        pts[np++] = intersections[0].element->curveX(0.5*(intersections[0].ksi+intersections[1].ksi));
+        pts[np++] = intersections[0].element->curveY(0.5*(intersections[0].ksi+intersections[1].ksi));
+    }
+    else{
+        pts[np++] = intersections[0].element->nodes[2]->x;
+        pts[np++] = intersections[0].element->nodes[2]->y;
+    }
+
+    pts[np++] = intersections[1].element->curveX(intersections[1].ksi);
+    pts[np++] = intersections[1].element->curveY(intersections[1].ksi);
+
+    int iEdgeIntBegin = intersections[0].edge;
+    int iEdgeIntEnd = intersections[1].edge;
+
+    //for(int i=iEdgeIntBegin; i<)
 
 
-    pts[0] = intersections[0].element->curveX(intersections[0].ksi);
-    pts[1] = intersections[0].element->curveY(intersections[0].ksi);
+    glColor3d(0.0, 1.0, 0.0);
+    glPointSize(10.0);
+    glBegin(GL_POINTS);
+    for(int i=0; i<np/2+2; i+=2)
+        glVertex2d(pts[i], pts[i+1]);
 
-    pts[2] = intersections[0].element->curveX(0.5*(intersections[0].ksi+intersections[1].ksi));
-    pts[3] = intersections[0].element->curveY(0.5*(intersections[0].ksi+intersections[1].ksi));
 
-    pts[4] = intersections[1].element->curveX(intersections[1].ksi);
-    pts[5] = intersections[1].element->curveY(intersections[1].ksi);
-
+    glEnd();
 
 
 }
