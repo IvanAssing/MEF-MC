@@ -31,6 +31,7 @@ namespace MC
             int nBoundaryElements;
             int nElements;
             int nElementEdges;
+            int nElementsUnderBoundary;
 
             Mesh();
             Mesh(double origin1, double origin2, double h12, double n1, double n2);

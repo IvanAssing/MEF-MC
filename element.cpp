@@ -277,6 +277,8 @@ void MC::Element::findTriangleDivision(void)
 
     int np = 0;
 
+
+
     pts_vertex[0][0] = edges[1];
     pts_vertex[0][1] = edges[0];
     pts_vertex[1][0] = edges[1];
@@ -294,27 +296,74 @@ void MC::Element::findTriangleDivision(void)
         pts[np++] = intersections[0].element->curveY(0.5*(intersections[0].ksi+intersections[1].ksi));
     }
     else{
+        pts[np++] = intersections[0].element->curveX(0.5*(intersections[0].ksi+1.));
+        pts[np++] = intersections[0].element->curveY(0.5*(intersections[0].ksi+1.));
+
         pts[np++] = intersections[0].element->nodes[2]->x;
         pts[np++] = intersections[0].element->nodes[2]->y;
+
+        pts[np++] = intersections[1].element->curveX(0.5*(intersections[1].ksi-1.));
+        pts[np++] = intersections[1].element->curveY(0.5*(intersections[1].ksi-1.));
     }
 
     pts[np++] = intersections[1].element->curveX(intersections[1].ksi);
     pts[np++] = intersections[1].element->curveY(intersections[1].ksi);
 
-    int iEdgeIntBegin = intersections[0].edge;
-    int iEdgeIntEnd = intersections[1].edge;
+    double prev_x = intersections[1].element->curveX(intersections[1].ksi);
+    double prev_y = intersections[1].element->curveY(intersections[1].ksi);
 
-    //for(int i=iEdgeIntBegin; i<)
+    int iEdgeIntBegin = intersections[1].edge;
+    int iEdgeIntEnd = intersections[0].edge;
+
+    int ie, ne = iEdgeIntEnd-iEdgeIntBegin;
+
+    if(ne <=0) ne +=4;
+
+    for(int i=0, ie = iEdgeIntBegin; i<ne; i++, ie = normalizeEdge(ie+1)){
+        pts[np++] = 0.5*(prev_x + pts_vertex[ie][0]);
+        pts[np++] = 0.5*(prev_y + pts_vertex[ie][1]);
+        pts[np++] = pts_vertex[ie][0];
+        pts[np++] = pts_vertex[ie][1];
+        prev_x = pts_vertex[ie][0];
+        prev_y = pts_vertex[ie][1];
+    }
+
+    pts[np++] = 0.5*(prev_x + intersections[0].element->curveX(intersections[0].ksi));
+    pts[np++] = 0.5*(prev_y + intersections[0].element->curveY(intersections[0].ksi));
 
 
     glColor3d(0.0, 1.0, 0.0);
     glPointSize(10.0);
     glBegin(GL_POINTS);
-    for(int i=0; i<np/2+2; i+=2)
+    for(int i=0; i<np; i+=2)
         glVertex2d(pts[i], pts[i+1]);
-
-
     glEnd();
+
+    double med_x = 0;
+    double med_y = 0;
+
+    for(int i=0; i<np; i+=2){
+        med_x += pts[i];
+        med_y += pts[i+1];
+    }
+
+    med_x /= 0.5*np;
+    med_y /= 0.5*np;
+
+
+    glBegin(GL_POINTS);
+    glVertex2d(med_x, med_y);
+    glEnd();
+
+    glColor3d(0.0, 1.0, 1.0);
+    glLineWidth(2.);
+    glBegin(GL_LINES);
+    for(int i=0; i<np; i+=4){
+        glVertex2d(med_x, med_y);
+        glVertex2d(pts[i], pts[i+1]);
+    }
+    glEnd();
+
 
 
 }

@@ -42,8 +42,8 @@ void MC::Mesh::draw(void)
     }
     glEnd();
 
-    for(int i=0; i<nElements; i++)
-        elements[i]->draw();
+//    for(int i=0; i<nElements; i++)
+//        elements[i]->draw();
 
     for(int i=0; i<nBoundaryElements; i++)
         boundaryElements[i]->draw();
@@ -75,10 +75,10 @@ void MC::Mesh::draw(void)
     for(int i=0; i<nBoundaryNodes; i++)
         boundaryNodes[i]->draw();
 
-    for(int i=0; i<nElementEdges; i++)
-        elementEdges[i]->draw();
+//    for(int i=0; i<nElementEdges; i++)
+//        elementEdges[i]->draw();
 
-    for(int i=9; i<50; i++)
+    for(int i=0; i<nElementsUnderBoundary; i++)
         elements[i]->findTriangleDivision();
 }
 
@@ -455,6 +455,8 @@ void MC::Mesh::createMesh_2(void)
             elements[i]->adjacentElements[MC::Element::normalizeEdge(elements[i]->intersections[0].edge+2)]=
                     elements[i];
     }
+
+    nElementsUnderBoundary = nElements;
 
     for(int i=0; i<nElements; i++)
         setInternalLinks(elements[i]);
