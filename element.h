@@ -3,6 +3,7 @@
 
 #include "node.h"
 #include "boundaryintersection.h"
+#include "triangleelement.h"
 
 namespace MC
 {

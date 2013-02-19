@@ -277,6 +277,10 @@ void MC::Element::findTriangleDivision(void)
 
     int np = 0;
 
+    bool concavePolygon = false;
+    int concavePolygon_indexPoint;
+
+
 
 
     pts_vertex[0][0] = edges[1];
@@ -304,6 +308,9 @@ void MC::Element::findTriangleDivision(void)
 
         pts[np++] = intersections[1].element->curveX(0.5*(intersections[1].ksi-1.));
         pts[np++] = intersections[1].element->curveY(0.5*(intersections[1].ksi-1.));
+
+        concavePolygon = true;
+
     }
 
     pts[np++] = intersections[1].element->curveX(intersections[1].ksi);
@@ -339,30 +346,34 @@ void MC::Element::findTriangleDivision(void)
         glVertex2d(pts[i], pts[i+1]);
     glEnd();
 
-    double med_x = 0;
-    double med_y = 0;
+    if(concavePolygon ==false){
+        double med_x = 0;
+        double med_y = 0;
 
-    for(int i=0; i<np; i+=2){
-        med_x += pts[i];
-        med_y += pts[i+1];
-    }
+        for(int i=0; i<np; i+=2){
+            med_x += pts[i];
+            med_y += pts[i+1];
+        }
 
-    med_x /= 0.5*np;
-    med_y /= 0.5*np;
+        med_x /= 0.5*np;
+        med_y /= 0.5*np;
 
-
-    glBegin(GL_POINTS);
-    glVertex2d(med_x, med_y);
-    glEnd();
-
-    glColor3d(0.0, 1.0, 1.0);
-    glLineWidth(2.);
-    glBegin(GL_LINES);
-    for(int i=0; i<np; i+=4){
+        glBegin(GL_POINTS);
         glVertex2d(med_x, med_y);
-        glVertex2d(pts[i], pts[i+1]);
+        glEnd();
+
+        for(int i=0; i<np-4; i+=4){
+            MC::TriangleElement(med_x, med_y, 0., 0., pts[i], pts[i+1], 0., 0., pts[i+4], pts[i+5], 0., 0.);
+        }
+        MC::TriangleElement(med_x, med_y, 0., 0., pts[np-4], pts[np-3], 0., 0., pts[0], pts[1], 0., 0.);
     }
-    glEnd();
+    else{
+
+
+
+
+    }
+
 
 
 

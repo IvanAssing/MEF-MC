@@ -27,7 +27,8 @@ SOURCES += main.cpp\
     graphicwindow.cpp \
     graphic.cpp \
     boundaryintersection.cpp \
-    elementedge.cpp
+    elementedge.cpp \
+    triangleelement.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -41,6 +42,7 @@ HEADERS  += mainwindow.h \
     graphicwindow.h \
     graphic.h \
     boundaryintersection.h \
-    elementedge.h
+    elementedge.h \
+    triangleelement.h
 
 FORMS    += mainwindow.ui
