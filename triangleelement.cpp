@@ -23,4 +23,14 @@ MC::TriangleElement::TriangleElement(double x0, double y0, double x1, double y1,
         glVertex2d(x0, y0);
     }
     glEnd();
+
+    glColor4d(0.0, 1.0, 0.5, 0.4);
+    glBegin(GL_TRIANGLES);{
+        glVertex2d(x0, y0);
+
+        glVertex2d(x2, y2);
+
+        glVertex2d(x4, y4);
+    }
+    glEnd();
 }

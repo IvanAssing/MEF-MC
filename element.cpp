@@ -278,7 +278,7 @@ void MC::Element::findTriangleDivision(void)
     int np = 0;
 
     bool concavePolygon = false;
-    int concavePolygon_indexPoint;
+    int concavePolygon_indexPoint = 0;
 
 
 
@@ -302,6 +302,8 @@ void MC::Element::findTriangleDivision(void)
     else{
         pts[np++] = intersections[0].element->curveX(0.5*(intersections[0].ksi+1.));
         pts[np++] = intersections[0].element->curveY(0.5*(intersections[0].ksi+1.));
+
+        concavePolygon_indexPoint = np;
 
         pts[np++] = intersections[0].element->nodes[2]->x;
         pts[np++] = intersections[0].element->nodes[2]->y;
@@ -346,7 +348,7 @@ void MC::Element::findTriangleDivision(void)
         glVertex2d(pts[i], pts[i+1]);
     glEnd();
 
-    if(concavePolygon ==false){
+    if(concavePolygon ==false || np <=16){
         double med_x = 0;
         double med_y = 0;
 
@@ -369,8 +371,23 @@ void MC::Element::findTriangleDivision(void)
     }
     else{
 
+        //        if(np<=12){
+        //            MC::TriangleElement(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5], pts[6], pts[7], pts[8], pts[9], pts[10], pts[11]);
+        //        return;
+        //        }
 
+        //        if(np<=16){
+        //            MC::TriangleElement(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5], pts[6], pts[7], pts[8], pts[9], pts[10], pts[11]);
+        //        }
 
+        int k = concavePolygon_indexPoint + 2;
+
+        MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], pts[k], pts[k+1], pts[k+2], pts[k+3], pts[k+4], pts[k+5],pts[k+6], pts[k+7], 0., 0.);
+
+        for(int i=concavePolygon_indexPoint + 8; i<np-4; i+=4){
+            MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], 0., 0., pts[i], pts[i+1], 0., 0., pts[i+4], pts[i+5], 0., 0.);
+        }
+        MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], 0., 0., pts[np-4], pts[np-3], 0., 0., pts[0], pts[1], 0., 0.);
 
     }
 
