@@ -42,8 +42,8 @@ void MC::Mesh::draw(void)
     }
     glEnd();
 
-//    for(int i=0; i<nElements; i++)
-//        elements[i]->draw();
+    for(int i=nElementsUnderBoundary; i<nElements; i++)
+        elements[i]->draw();
 
     for(int i=0; i<nBoundaryElements; i++)
         boundaryElements[i]->draw();
