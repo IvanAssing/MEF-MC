@@ -42,6 +42,9 @@ void MC::Mesh::draw(void)
     }
     glEnd();
 
+//    for(int i=0; i<nElements; i++)
+//        elements[i]->draw();
+
     for(int i=nElementsUnderBoundary; i<nElements; i++)
         elements[i]->draw();
 
@@ -50,6 +53,7 @@ void MC::Mesh::draw(void)
 
     glColor4d(1.0, 1.0, 1.0, 0.5);
     glPointSize(16.f);
+
 //        for(int i=0; i<nElements; i++)
 //        {
 //            if(elements[i]->intersections[0].element != NULL)
@@ -74,6 +78,7 @@ void MC::Mesh::draw(void)
     glPointSize(5.0f);
     for(int i=0; i<nBoundaryNodes; i++)
         boundaryNodes[i]->draw();
+
 
 //    for(int i=0; i<nElementEdges; i++)
 //        elementEdges[i]->draw();
