@@ -52,6 +52,7 @@ namespace MC
             Polynomial2D& differential2(int nDiffOrder = 1) const;
 
             friend std::ostream& operator<<(std::ostream& out, Polynomial2D& obj);
+            //friend Polynomial2D& operator*(double alpha, Polynomial2D& obj);
 
             // destructor
             virtual ~Polynomial2D();
