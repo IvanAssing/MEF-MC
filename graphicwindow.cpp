@@ -16,7 +16,7 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     xmax = +100.;
     ymax = +100.;
 
-    double h = 3.02;
+    double h = 8;
 
     mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
     //mesh = new MC::Mesh(-125, -125, .12, 2400, 2400);
@@ -25,79 +25,79 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     double points[128];
 
     double DtoR = M_PI/180.;
-//    double ri = 74.5;
+    double ri = 74.5;
 
 
-//    double r[10] = {76.0, 80.0, 90.0, 100.0, 100.0, 100.0, 90.0, 80.0, 76.0, ri};
-//    double b[10] = {3.7, 7.5, 7.5, 7.5, 22.5, 37.5, 37.5, 37.5, 41.3, 45.0};
+    double r[10] = {76.0, 80.0, 90.0, 100.0, 100.0, 100.0, 90.0, 80.0, 76.0, ri};
+    double b[10] = {3.7, 7.5, 7.5, 7.5, 22.5, 37.5, 37.5, 37.5, 41.3, 45.0};
 
-//    double alpha;
-//    int k=0;
-
-//    points[k++] = 0.0;
-//    points[k++] = 0.0;
-//    points[k++] = ri/2.0;
-//    points[k++] = 0.0;
-//    points[k++] = ri;
-//    points[k++] = 0.0;
-
-
-//    for(int i=0; i<6; i++){
-//        alpha = i*45.0*DtoR;
-//        for(int j=0; j<10; j++){
-//            points[k++] = r[j]*cos(alpha+b[j]*DtoR);
-//            points[k++] = r[j]*sin(alpha+b[j]*DtoR);
-//        }
-//    }
-
-//    points[k++] = 0.0;
-//    points[k++] = -ri/2.0;
-
-////    double points[24]={
-////        0.0, 0.0,
-////        1.0, -1.0,
-////        3.0, -2.0,
-////        6.0, -2.0,
-////        9.0, -2.0,
-////        10.0, -1.0,
-////        10.5, 0.0,
-////        10.0, 1.0,
-////        9.0, 2.0,
-////        6.0, 2.0,
-////        3.0, 2.0,
-////        1.0, 1.0
-////    };
-
-//    mesh->addBoundaryNodes(64, points);
-
-//    //mesh->createMesh();
-//      mesh->createMesh_2();
-
-
-    double rx = 100.;
-    double ry = 100.;
-
-    double alpha0 = 0.0;
-    double alpha1 = 2*M_PI;
-
-    int np = 24;
-
-    double da = 2*M_PI/np;
-
-
+    double alpha;
     int k=0;
 
-    for(int i=0; i<=np; i++)
-    {
-            points[k++] = rx*cos(i*da);
-            points[k++] = ry*sin(i*da);
+    points[k++] = 0.0;
+    points[k++] = 0.0;
+    points[k++] = ri/2.0;
+    points[k++] = 0.0;
+    points[k++] = ri;
+    points[k++] = 0.0;
+
+
+    for(int i=0; i<6; i++){
+        alpha = i*45.0*DtoR;
+        for(int j=0; j<10; j++){
+            points[k++] = r[j]*cos(alpha+b[j]*DtoR);
+            points[k++] = r[j]*sin(alpha+b[j]*DtoR);
+        }
     }
 
+    points[k++] = 0.0;
+    points[k++] = -ri/2.0;
 
+//    double points[24]={
+//        0.0, 0.0,
+//        1.0, -1.0,
+//        3.0, -2.0,
+//        6.0, -2.0,
+//        9.0, -2.0,
+//        10.0, -1.0,
+//        10.5, 0.0,
+//        10.0, 1.0,
+//        9.0, 2.0,
+//        6.0, 2.0,
+//        3.0, 2.0,
+//        1.0, 1.0
+//    };
 
-    mesh->addBoundaryNodes((k-1)/2., points);
+    mesh->addBoundaryNodes(64, points);
 
+    //mesh->createMesh();
       mesh->createMesh_2();
+
+
+//    double rx = 100.;
+//    double ry = 100.;
+
+//    double alpha0 = 0.0;
+//    double alpha1 = 2*M_PI;
+
+//    int np = 24;
+
+//    double da = 2*M_PI/np;
+
+
+//    int k=0;
+
+//    for(int i=0; i<=np; i++)
+//    {
+//            points[k++] = rx*cos(i*da);
+//            points[k++] = ry*sin(i*da);
+//    }
+
+
+
+//    mesh->addBoundaryNodes((k-1)/2., points);
+
+//      mesh->createMesh_2();
 
 }
 

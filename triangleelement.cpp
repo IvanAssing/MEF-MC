@@ -9,6 +9,17 @@ MC::TriangleElement::TriangleElement()
 MC::TriangleElement::TriangleElement(double x0, double y0, double x1, double y1, double x2, double y2,
                                      double x3, double y3, double x4, double y4, double x5, double y5)
 {
+
+
+
+
+
+
+
+
+
+
+
     glColor3d(0.0, 1.0, 1.0);
     glLineWidth(2.);
 
@@ -33,4 +44,7 @@ MC::TriangleElement::TriangleElement(double x0, double y0, double x1, double y1,
         glVertex2d(x4, y4);
     }
     glEnd();
+
+
+
 }
