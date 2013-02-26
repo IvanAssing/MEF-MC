@@ -83,8 +83,9 @@ void MC::Mesh::draw(void)
 //    for(int i=0; i<nElementEdges; i++)
 //        elementEdges[i]->draw();
 
-    for(int i=0; i<nElementsUnderBoundary; i++)
-        elements[i]->findTriangleDivision();
+//    for(int i=0; i<nElementsUnderBoundary; i++)
+        for(int i=0; i<1; i++)
+        elements[5]->findTriangleDivision();
 }
 
 
