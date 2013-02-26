@@ -22,6 +22,7 @@ MC::Element::Element(int index_, int index1_, int index2_):index(index_), index1
 
 
     nIntersections = 0;
+    nTriangles = 0;
 }
 
 void MC::Element::setEdges(double *edges_)
@@ -278,6 +279,9 @@ void MC::Element::findTriangleDivision(void)
 {
     double *pts = new double[100];
 
+    triangles = new TriangleElement[50];
+    nTriangles = 0;
+
     double pts_vertex[4][2];
 
     pts_vertex[0][0] = edges[1];
@@ -352,14 +356,16 @@ void MC::Element::findTriangleDivision(void)
         pts[np++] = 0.5*(prev_y + intersections[ni].element->curveY(intersections[ni].ksi));
 
 
-        glColor3d(0.0, 1.0, 0.0);
-        glPointSize(10.0);
-        glBegin(GL_POINTS);
-        for(int i=0; i<np; i+=2)
-            glVertex2d(pts[i], pts[i+1]);
-        glEnd();
+//        glColor3d(0.0, 1.0, 0.0);
+//        glPointSize(10.0);
+//        glBegin(GL_POINTS);
+//        for(int i=0; i<np; i+=2)
+//            glVertex2d(pts[i], pts[i+1]);
+//        glEnd();
 
         if(concavePolygon ==false || np <=16){
+            //return;
+
             double med_x = 0;
             double med_y = 0;
 
@@ -376,11 +382,12 @@ void MC::Element::findTriangleDivision(void)
             glEnd();
 
             for(int i=0; i<np-4; i+=4){
-                MC::TriangleElement(med_x, med_y, 0., 0., pts[i], pts[i+1], 0., 0., pts[i+4], pts[i+5], 0., 0.);
+                triangles[nTriangles++] = MC::TriangleElement(med_x, med_y, 0.5*(med_x+pts[i]), 0.5*(med_y+pts[i+1]), pts[i], pts[i+1], pts[i+2], pts[i+3], pts[i+4], pts[i+5], 0.5*(med_x+pts[i+4]), 0.5*(med_y+pts[i+5]));
             }
-            MC::TriangleElement(med_x, med_y, 0., 0., pts[np-4], pts[np-3], 0., 0., pts[0], pts[1], 0., 0.);
+            triangles[nTriangles++] = MC::TriangleElement(med_x, med_y, 0.5*(med_x+pts[np-4]), 0.5*(med_y+pts[np-3]), pts[np-4], pts[np-3], pts[np-2], pts[np-1], pts[0], pts[1], 0.5*(med_x+pts[0]), 0.5*(med_y+pts[1]));
         }
         else{
+            //return;
 
             //        if(np<=12){
             //            MC::TriangleElement(pts[0], pts[1], pts[2], pts[3], pts[4], pts[5], pts[6], pts[7], pts[8], pts[9], pts[10], pts[11]);
@@ -393,12 +400,14 @@ void MC::Element::findTriangleDivision(void)
 
             int k = concavePolygon_indexPoint + 2;
 
-            MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], pts[k], pts[k+1], pts[k+2], pts[k+3], pts[k+4], pts[k+5],pts[k+6], pts[k+7], 0., 0.);
+            triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], pts[k], pts[k+1], pts[k+2], pts[k+3], pts[k+4], pts[k+5],pts[k+6], pts[k+7], 0.5*(pts[concavePolygon_indexPoint]+pts[k+6]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[k+7]));
 
             for(int i=concavePolygon_indexPoint + 8; i<np-4; i+=4){
-                MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], 0., 0., pts[i], pts[i+1], 0., 0., pts[i+4], pts[i+5], 0., 0.);
+                triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[i]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[i+1]), pts[i], pts[i+1],  pts[i+2], pts[i+3], pts[i+4], pts[i+5], 0.5*(pts[concavePolygon_indexPoint]+pts[i+4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[i+5]));
             }
-            MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], 0., 0., pts[np-4], pts[np-3], 0., 0., pts[0], pts[1], 0., 0.);
+           //triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], 0.5*(pts[concavePolygon_indexPoint]+pts[0]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[1]));
+             triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], pts[2], pts[3]);
+            //triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], 0., 0., pts[np-4], pts[np-3], 0., 0., pts[0], pts[1], 0., 0.);
 
         }
 

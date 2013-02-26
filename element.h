@@ -18,6 +18,9 @@ namespace MC
             BoundaryIntersection *intersections;
             int nIntersections;
 
+            TriangleElement *triangles;
+            int nTriangles;
+
             Element();
             Element(int index, int index1, int index2);
 

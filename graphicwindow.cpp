@@ -2,6 +2,8 @@
 
 #include <mesh.h>
 #include <cmath>
+#include <iomanip>
+
 #include <QImage>
 #include <QString>
 #include <QImageWriter>
@@ -16,17 +18,18 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     xmax = +100.;
     ymax = +100.;
 
-    double h = 8;
+
+    // Teste 01 - Geometria complexa
+    /*
+    double h = 3.1/10;
 
     mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
-    //mesh = new MC::Mesh(-125, -125, .12, 2400, 2400);
-    //mesh = new MC::Mesh(-125, -125, h, 250/h, 250/h);
 
     double points[128];
 
     double DtoR = M_PI/180.;
-    double ri = 74.5;
 
+    double ri = 74.5;
 
     double r[10] = {76.0, 80.0, 90.0, 100.0, 100.0, 100.0, 90.0, 80.0, 76.0, ri};
     double b[10] = {3.7, 7.5, 7.5, 7.5, 22.5, 37.5, 37.5, 37.5, 41.3, 45.0};
@@ -53,51 +56,155 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     points[k++] = 0.0;
     points[k++] = -ri/2.0;
 
-//    double points[24]={
-//        0.0, 0.0,
-//        1.0, -1.0,
-//        3.0, -2.0,
-//        6.0, -2.0,
-//        9.0, -2.0,
-//        10.0, -1.0,
-//        10.5, 0.0,
-//        10.0, 1.0,
-//        9.0, 2.0,
-//        6.0, 2.0,
-//        3.0, 2.0,
-//        1.0, 1.0
-//    };
 
     mesh->addBoundaryNodes(64, points);
 
-    //mesh->createMesh();
+      mesh->createMesh_2();
+     // */
+
+
+    // Teste 02 - Circulo
+    /*
+
+    double h = 3.1/100;
+
+    mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
+
+    double points[128];
+
+    double rx = 10.;
+    double ry = 10.;
+
+    int np = 24;
+
+    double da = 2*M_PI/np;
+
+
+    int k=0;
+
+    for(int i=0; i<=np; i++)
+    {
+            points[k++] = rx*cos(i*da);
+            points[k++] = ry*sin(i*da);
+    }
+
+
+
+    mesh->addBoundaryNodes((k-1)/2., points);
+
       mesh->createMesh_2();
 
+      double areaN = mesh->evalArea();
+              double areaA = M_PI*rx*rx;
 
-//    double rx = 100.;
-//    double ry = 100.;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nArea = "<<areaN;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nArea = "<<areaA;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
 
-//    double alpha0 = 0.0;
-//    double alpha1 = 2*M_PI;
-
-//    int np = 24;
-
-//    double da = 2*M_PI/np;
+           // */
 
 
-//    int k=0;
+    // Teste 03 - Retangulo
+    /*
 
-//    for(int i=0; i<=np; i++)
-//    {
-//            points[k++] = rx*cos(i*da);
-//            points[k++] = ry*sin(i*da);
-//    }
+    double h = 1.3;
+
+    mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
+
+    double points[128];
+
+    double a = 100.;
+    double b = 100.;
+
+
+    int k=0;
+
+    points[k++] = -a/2;
+    points[k++] = -b/2;
+    points[k++] = 0.0;
+    points[k++] = -b/2;
+    points[k++] = a/2;
+    points[k++] = -b/2;
+
+
+    points[k++] = a/2;
+    points[k++] = 0.0;
+    points[k++] = a/2;
+    points[k++] = b/2;
+
+    points[k++] = 0.0;
+    points[k++] = b/2;
+    points[k++] = -a/2;
+    points[k++] = b/2;
+
+    points[k++] = -a/2;
+    points[k++] = 0.0;
 
 
 
-//    mesh->addBoundaryNodes((k-1)/2., points);
+    mesh->addBoundaryNodes(8, points);
+
+    mesh->createMesh_2();
+
+    double areaN = mesh->evalArea();
+    double areaA = a*b;
+
+    std::cout<<"\nArea = "<<areaN;
+    std::cout<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
+
+    // */
+
+      // Teste 04 - Parabola
+      ///*
+
+      double h = 0.132;
+
+      mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
+
+      double points[128];
+
+      double a = 10.;
+      double b = 100.;
+
+
+      int k=0;
+
+      points[k++] = -a;
+      points[k++] = 0.0;
+      points[k++] = 0.0;
+      points[k++] = 0.0;
+      points[k++] = a;
+      points[k++] = 0.0;
+
+
+      points[k++] = 0.0;
+      points[k++] = a;
+
+
+      points[k++] = a/2;
+      points[k++] = b/2;
+
+      points[k++] = 0.0;
+      points[k++] = b/2;
+      points[k++] = -a/2;
+      points[k++] = b/2;
+
+      points[k++] = -a/2;
+      points[k++] = 0.0;
+
+
+
+      mesh->addBoundaryNodes(4, points);
 
 //      mesh->createMesh_2();
+
+//      double areaN = mesh->evalArea();
+//      double areaA = a*b;
+
+//      std::cout<<"\nArea = "<<areaN;
+//      std::cout<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
+
+      // */
 
 }
 

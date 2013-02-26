@@ -42,37 +42,41 @@ void MC::Mesh::draw(void)
     }
     glEnd();
 
-//    for(int i=0; i<nElements; i++)
+    //    for(int i=0; i<nElements; i++)
+    //        elements[i]->draw();
+
+//    for(int i=nElementsUnderBoundary; i<nElements; i++)
 //        elements[i]->draw();
 
-    for(int i=nElementsUnderBoundary; i<nElements; i++)
-        elements[i]->draw();
+
 
     for(int i=0; i<nBoundaryElements; i++)
         boundaryElements[i]->draw();
 
+    return;
+
     glColor4d(1.0, 1.0, 1.0, 0.5);
     glPointSize(16.f);
 
-//        for(int i=0; i<nElements; i++)
-//        {
-//            if(elements[i]->intersections[0].element != NULL)
-//                elements[i]->intersections[0].draw();
+    //        for(int i=0; i<nElements; i++)
+    //        {
+    //            if(elements[i]->intersections[0].element != NULL)
+    //                elements[i]->intersections[0].draw();
 
-//            //        if(elements[i]->nIntersections > 2)
-//            //            elements[i]->intersections[2].draw();
-//        }
+    //            //        if(elements[i]->nIntersections > 2)
+    //            //            elements[i]->intersections[2].draw();
+    //        }
 
-//        glColor4d(0.0, 0.0, 0.0, 0.5);
-//        glPointSize(8.f);
-//        for(int i=0; i<nElements; i++)
-//        {
-//            if(elements[i]->intersections[1].element != NULL)
-//                elements[i]->intersections[1].draw();
+    //        glColor4d(0.0, 0.0, 0.0, 0.5);
+    //        glPointSize(8.f);
+    //        for(int i=0; i<nElements; i++)
+    //        {
+    //            if(elements[i]->intersections[1].element != NULL)
+    //                elements[i]->intersections[1].draw();
 
-//            //        if(elements[i]->nIntersections > 2)
-//            //            elements[i]->intersections[3].draw();
-//        }
+    //            //        if(elements[i]->nIntersections > 2)
+    //            //            elements[i]->intersections[3].draw();
+    //        }
 
     glColor4d(1.0, 0.0, 0.0, 1.0);
     glPointSize(5.0f);
@@ -80,12 +84,15 @@ void MC::Mesh::draw(void)
         boundaryNodes[i]->draw();
 
 
-//    for(int i=0; i<nElementEdges; i++)
-//        elementEdges[i]->draw();
+    //    for(int i=0; i<nElementEdges; i++)
+    //        elementEdges[i]->draw();
 
-//    for(int i=0; i<nElementsUnderBoundary; i++)
-        for(int i=0; i<1; i++)
-        elements[5]->findTriangleDivision();
+    for(int i=0; i<nElementsUnderBoundary; i++){
+        //if(!elements[i]->nTriangles) continue;
+        for(int j=0; j<elements[i]->nTriangles; j++)
+            elements[i]->triangles[j].draw();
+    }
+
 }
 
 
@@ -109,7 +116,7 @@ void MC::Mesh::addBoundaryNodes(int n, double *points)
 
     boundaryElements[nBoundaryElements-1] =
             new MC::BoundaryElement(boundaryNodes[nBoundaryNodes-2],
-                                    boundaryNodes[nBoundaryNodes-1], boundaryNodes[0]);
+            boundaryNodes[nBoundaryNodes-1], boundaryNodes[0]);
 
     this->findLimits();
 
@@ -213,10 +220,10 @@ void MC::Mesh::createMesh(void)
 
         switch(currentElement->intersections[currentElement->nIntersections-1].edge)
         {
-        case 0 : { edge[2] = edge[0] , edge[0] -= this->h12 , index2 -= 1; break; }
-        case 1 : { edge[3] = edge[1] , edge[1] += this->h12 , index1 += 1; break; }
-        case 2 : { edge[0] = edge[2] , edge[2] += this->h12 , index2 += 1; break; }
-        case 3 : { edge[1] = edge[3] , edge[3] -= this->h12 , index1 -= 1; break; }
+            case 0 : { edge[2] = edge[0] , edge[0] -= this->h12 , index2 -= 1; break; }
+            case 1 : { edge[3] = edge[1] , edge[1] += this->h12 , index1 += 1; break; }
+            case 2 : { edge[0] = edge[2] , edge[2] += this->h12 , index2 += 1; break; }
+            case 3 : { edge[1] = edge[3] , edge[3] -= this->h12 , index1 -= 1; break; }
         }
     }
 
@@ -466,6 +473,12 @@ void MC::Mesh::createMesh_2(void)
 
     for(int i=0; i<nElements; i++)
         setInternalLinks(elements[i]);
+
+    for(int i=0; i<nElementsUnderBoundary; i++)
+        elements[i]->findTriangleDivision();
+
+    //for(int i=0; i<nElementsUnderBoundary; i++)
+    //        elements[29]->findTriangleDivision();
 }
 
 
@@ -539,10 +552,10 @@ void MC::Mesh::setExternalLinks(int index1, int index2, int edge)
 inline void getAdjacentElementIndex(int edge, int *index1, int *index2)
 {
     switch(edge){
-    case 0 : {--*index2; return;}
-    case 1 : {++*index1; return;}
-    case 2 : {++*index2; return;}
-    case 3 : {--*index1; return;}
+        case 0 : {--*index2; return;}
+        case 1 : {++*index1; return;}
+        case 2 : {++*index2; return;}
+        case 3 : {--*index1; return;}
     }
 }
 
@@ -569,4 +582,24 @@ void MC::Mesh::setInternalLinks(MC::Element *element)
             grid[index1][index2]->adjacentElements[MC::Element::normalizeEdge(i+2)] = element;
         }
     }
+
+
+}
+
+double MC::Mesh::evalArea(void)
+{
+    double sum = 0.0;
+
+    double cte = 1.0;
+
+    Polynomial2D f(0,&cte);
+
+    for(int i=0; i<nElementsUnderBoundary; i++)
+        for(int j=0; j<elements[i]->nTriangles; j++)
+            sum += elements[i]->triangles[j].evalIntegral(f);
+
+    for(int i=nElementsUnderBoundary; i<nElements; i++)
+        sum += h12*h12;
+
+    return sum;
 }

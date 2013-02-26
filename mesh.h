@@ -48,6 +48,8 @@ namespace MC
             void setExternalLinks(int index1, int index2, int edge);
             void setInternalLinks(Element *element);
 
+            double evalArea(void);
+
             void draw(void);
     };
 }
