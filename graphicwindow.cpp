@@ -66,16 +66,16 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     // Teste 02 - Circulo
     /*
 
-    double h = 3.1/100;
+    double h = 3.1/200;
 
     mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
 
-    double points[128];
+    double points[12800];
 
     double rx = 10.;
     double ry = 10.;
 
-    int np = 24;
+    int np = 400;
 
     double da = 2*M_PI/np;
 
@@ -97,8 +97,9 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
       double areaN = mesh->evalArea();
               double areaA = M_PI*rx*rx;
 
-      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nArea = "<<areaN;
-      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nArea = "<<areaA;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nNE = "<<mesh->nElements;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaN = "<<areaN;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaA = "<<areaA;
       std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
 
            // */
@@ -149,21 +150,24 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
     double areaN = mesh->evalArea();
     double areaA = a*b;
 
-    std::cout<<"\nArea = "<<areaN;
-    std::cout<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nNE = "<<mesh->nElements;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaN = "<<areaN;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaA = "<<areaA;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
+
 
     // */
 
       // Teste 04 - Parabola
       ///*
 
-      double h = 0.132;
+      double h = 1.1;
 
       mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
 
       double points[128];
 
-      double a = 10.;
+      double a = 10.0002;
       double b = 100.;
 
 
@@ -181,16 +185,7 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
       points[k++] = a;
 
 
-      points[k++] = a/2;
-      points[k++] = b/2;
 
-      points[k++] = 0.0;
-      points[k++] = b/2;
-      points[k++] = -a/2;
-      points[k++] = b/2;
-
-      points[k++] = -a/2;
-      points[k++] = 0.0;
 
 
 
@@ -201,8 +196,10 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
 //      double areaN = mesh->evalArea();
 //      double areaA = a*b;
 
-//      std::cout<<"\nArea = "<<areaN;
-//      std::cout<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
+//      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nNE = "<<mesh->nElements;
+//      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaN = "<<areaN;
+//      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaA = "<<areaA;
+//      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
 
       // */
 

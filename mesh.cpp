@@ -138,11 +138,11 @@ void MC::Mesh::findLimits(void)
         if(boundaryNodes[i]->y < min2) min2 = boundaryNodes[i]->y;
     }
 
-    origin1 = min1 - (max1-min1)*0.1; // 10%
-    origin2 = min2 - (max2-min2)*0.1; // 10%
+    origin1 = min1 - (max1-min1)*0.1 - h12; // 10%
+    origin2 = min2 - (max2-min2)*0.1 - h12; // 10%
 
-    n1 = static_cast<int> (1.2*(max1-min1)/h12) + 1;
-    n2 = static_cast<int> (1.2*(max2-min2)/h12) + 1;
+    n1 = static_cast<int> (h12 + 1.2*(max1-min1)/h12) + 1;
+    n2 = static_cast<int> (h12 + 1.2*(max2-min2)/h12) + 1;
 }
 
 
@@ -453,7 +453,8 @@ void MC::Mesh::createMesh_2(void)
         grid[elementEdges[i]->indexH2][elementEdges[i]->indexV2]->adjacentElements[MC::Element::normalizeEdge(edgeIndex+2)] =
                 grid[elementEdges[i]->indexH1][elementEdges[i]->indexV1];
 
-
+        int z =elementEdges[i]->indexH1;
+        z =elementEdges[i]->indexV1;
 
         setExternalLinks(elementEdges[i]->indexH1, elementEdges[i]->indexV1, edgeIndex);
 
