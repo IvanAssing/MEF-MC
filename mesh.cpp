@@ -42,18 +42,18 @@ void MC::Mesh::draw(void)
     }
     glEnd();
 
-    //    for(int i=0; i<nElements; i++)
-    //        elements[i]->draw();
+        for(int i=0; i<nElements; i++)
+            elements[i]->draw();
 
-//    for(int i=nElementsUnderBoundary; i<nElements; i++)
-//        elements[i]->draw();
+    for(int i=nElementsUnderBoundary; i<nElements; i++)
+        elements[i]->draw();
 
 
 
     for(int i=0; i<nBoundaryElements; i++)
         boundaryElements[i]->draw();
 
-    return;
+    //return;
 
     glColor4d(1.0, 1.0, 1.0, 0.5);
     glPointSize(16.f);
@@ -84,8 +84,8 @@ void MC::Mesh::draw(void)
         boundaryNodes[i]->draw();
 
 
-    //    for(int i=0; i<nElementEdges; i++)
-    //        elementEdges[i]->draw();
+        for(int i=0; i<nElementEdges; i++)
+            elementEdges[i]->draw();
 
     for(int i=0; i<nElementsUnderBoundary; i++){
         //if(!elements[i]->nTriangles) continue;
@@ -453,13 +453,8 @@ void MC::Mesh::createMesh_2(void)
         grid[elementEdges[i]->indexH2][elementEdges[i]->indexV2]->adjacentElements[MC::Element::normalizeEdge(edgeIndex+2)] =
                 grid[elementEdges[i]->indexH1][elementEdges[i]->indexV1];
 
-        int z =elementEdges[i]->indexH1;
-        z =elementEdges[i]->indexV1;
 
         setExternalLinks(elementEdges[i]->indexH1, elementEdges[i]->indexV1, edgeIndex);
-
-
-
 
 
     }
@@ -475,8 +470,8 @@ void MC::Mesh::createMesh_2(void)
     for(int i=0; i<nElements; i++)
         setInternalLinks(elements[i]);
 
-    for(int i=0; i<nElementsUnderBoundary; i++)
-        elements[i]->findTriangleDivision();
+//    for(int i=0; i<nElementsUnderBoundary; i++)
+//        elements[i]->findTriangleDivision();
 
     //for(int i=0; i<nElementsUnderBoundary; i++)
     //        elements[29]->findTriangleDivision();

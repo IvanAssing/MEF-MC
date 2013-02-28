@@ -201,6 +201,12 @@ int MC::Element::normalizeEdge(int edge)
 
 void MC::Element::setIntersection(MC::TypeIntersection type_, BoundaryIntersection intersection_)
 {
+    if(index == 0)
+    {
+        index = 0;
+    }
+
+
     if(type_ == MC::Output){
 
         if(nIntersections == 0){

@@ -161,13 +161,13 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
       // Teste 04 - Parabola
       ///*
 
-      double h = 1.1;
+      double h = 10;
 
       mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
 
       double points[128];
 
-      double a = 10.0002;
+      double a = 100.0002;
       double b = 100.;
 
 
@@ -184,14 +184,29 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
       points[k++] = 0.0;
       points[k++] = a;
 
-
-
-
-
-
       mesh->addBoundaryNodes(4, points);
 
-//      mesh->createMesh_2();
+
+//      points[k++] = 0.0;
+//      points[k++] = 0.0;
+//      points[k++] = a/2.;
+//      points[k++] = 0.0;
+//      points[k++] = a;
+//      points[k++] = 0.0;
+
+
+//      points[k++] = 0.0;
+//      points[k++] = a;
+
+//      points[k++] = -a;
+//      points[k++] = 0.0;
+
+//      points[k++] = -a/2.;
+//      points[k++] = 0.0;
+
+//      mesh->addBoundaryNodes(6, points);
+
+      mesh->createMesh_2();
 
 //      double areaN = mesh->evalArea();
 //      double areaA = a*b;
