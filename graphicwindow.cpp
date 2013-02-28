@@ -161,7 +161,7 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
       // Teste 04 - Parabola
       ///*
 
-      double h = 10;
+      double h = 2.;
 
       mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
 
@@ -180,11 +180,16 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
       points[k++] = a;
       points[k++] = 0.0;
 
+      points[k++] = 0.5*a;
+      points[k++] = 0.75*a;
 
       points[k++] = 0.0;
       points[k++] = a;
 
-      mesh->addBoundaryNodes(4, points);
+      points[k++] = -0.5*a;
+      points[k++] = 0.75*a;
+
+      mesh->addBoundaryNodes(6, points);
 
 
 //      points[k++] = 0.0;
@@ -208,13 +213,13 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
 
       mesh->createMesh_2();
 
-//      double areaN = mesh->evalArea();
-//      double areaA = a*b;
+      double areaN = mesh->evalArea();
+      double areaA = 4.*a/3.;
 
-//      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nNE = "<<mesh->nElements;
-//      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaN = "<<areaN;
-//      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaA = "<<areaA;
-//      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nNE = "<<mesh->nElements;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaN = "<<areaN;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nAreaA = "<<areaA;
+      std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nErro = "<<100*(areaN-areaA)/areaA<<" %\n\n";
 
       // */
 

@@ -1,4 +1,4 @@
-#include "mesh.h"
+﻿#include "mesh.h"
 
 #include <cmath>
 
@@ -295,6 +295,7 @@ void MC::Mesh::getEdges(int index1, int index2, double *edges)
 }
 
 
+
 void MC::Mesh::createMesh_2(void)
 {
     elementEdges= new ElementEdge*[n1*n2];
@@ -332,12 +333,12 @@ void MC::Mesh::createMesh_2(void)
 
             if(ksi1+INTERSECTION_TOLERANCE<=1.0 && ksi1-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveY(ksi1) - origin2)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1, 1);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1, (b1+2.0*c1*ksi1>=0)? -1:+1);
                 notStop = true;
             }
             if(ksi2+INTERSECTION_TOLERANCE<=1.0 && ksi2-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveY(ksi2) - origin2)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2, 1);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(i, i-1, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2, (b1+2.0*c1*ksi2>=0)? -1:+1);
                 notStop = true;
             }
 
@@ -351,12 +352,12 @@ void MC::Mesh::createMesh_2(void)
 
             if(ksi1+INTERSECTION_TOLERANCE<=1.0 && ksi1-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveY(ksi1) - origin2)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i-1, i, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1, 1);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(i-1, i, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi1, (b1+2.0*c1*ksi1>=0)? -1:+1);
                 notStop = true;
             }
             if(ksi2+INTERSECTION_TOLERANCE<=1.0 && ksi2-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveY(ksi2) - origin2)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(i-1, i, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2, 1);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(i-1, i, indexFound, indexFound, boundaryElements[indexBoundaryElement], ksi2, (b1+2.0*c1*ksi2>=0)? -1:+1);
                 notStop = true;
             }
 
@@ -417,6 +418,11 @@ void MC::Mesh::createMesh_2(void)
 
     for(int i=0; i<nElementEdges; i++){
 
+        // TESTE
+        std::cout<<"\n\n IE: "<<i<<" \ DIR: "<<elementEdges[i]->dir;
+        std::cout<<"\n 1: "<<elementEdges[i]->indexH1<<" - "<<elementEdges[i]->indexV1<<"\n 2: "<<elementEdges[i]->indexH2<<" - "<<elementEdges[i]->indexV2;
+        std::cout<<"\n "<<elementEdges[i]->element<<" / "<<elementEdges[i]->ksi;
+
         int edgeIndex = elementEdges[i]->getEdgeIndex();
 
         index1 = elementEdges[i]->indexH1;
@@ -470,8 +476,8 @@ void MC::Mesh::createMesh_2(void)
     for(int i=0; i<nElements; i++)
         setInternalLinks(elements[i]);
 
-//    for(int i=0; i<nElementsUnderBoundary; i++)
-//        elements[i]->findTriangleDivision();
+    for(int i=0; i<nElementsUnderBoundary; i++)
+        elements[i]->findTriangleDivision();
 
     //for(int i=0; i<nElementsUnderBoundary; i++)
     //        elements[29]->findTriangleDivision();
