@@ -161,7 +161,7 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
       // Teste 04 - Parabola
       ///*
 
-      double h = 2.;
+      double h = 10.3;
 
       mesh = new MC::Mesh(-125.1, -125,  h, 250/h, 250/h);
 
@@ -173,47 +173,61 @@ GraphicWindow::GraphicWindow(QWidget *parent) :
 
       int k=0;
 
-      points[k++] = -a;
-      points[k++] = 0.0;
-      points[k++] = 0.0;
-      points[k++] = 0.0;
-      points[k++] = a;
-      points[k++] = 0.0;
-
-      points[k++] = 0.5*a;
-      points[k++] = 0.75*a;
-
-      points[k++] = 0.0;
-      points[k++] = a;
-
-      points[k++] = -0.5*a;
-      points[k++] = 0.75*a;
-
-      mesh->addBoundaryNodes(6, points);
-
-
+//      points[k++] = -a;
 //      points[k++] = 0.0;
 //      points[k++] = 0.0;
-//      points[k++] = a/2.;
 //      points[k++] = 0.0;
 //      points[k++] = a;
 //      points[k++] = 0.0;
 
+//      points[k++] = 0.5*a;
+//      points[k++] = 0.75*a;
 
 //      points[k++] = 0.0;
 //      points[k++] = a;
+
+//      points[k++] = -0.5*a;
+//      points[k++] = 0.75*a;
+
+//      mesh->addBoundaryNodes(6, points);
+
 
 //      points[k++] = -a;
 //      points[k++] = 0.0;
 
-//      points[k++] = -a/2.;
+//      points[k++] = 0.0;
 //      points[k++] = 0.0;
 
-//      mesh->addBoundaryNodes(6, points);
+//      points[k++] = a;
+//      points[k++] = 0.0;
+
+
+//      points[k++] = 0.0;
+//      points[k++] = a;
+
+
+//      mesh->addBoundaryNodes(4, points);
+
+      points[k++] = -a;
+      points[k++] = 0.0;
+
+      points[k++] = 0.0;
+      points[k++] = a/2.;
+
+      points[k++] = a;
+      points[k++] = 0.0;
+
+
+      points[k++] = 0.0;
+      points[k++] = a;
+
+
+      mesh->addBoundaryNodes(4, points);
+
 
       mesh->createMesh_2();
 
-      double areaN = mesh->evalArea();
+      double areaN = mesh->evalArea()/(a);
       double areaA = 4.*a/3.;
 
       std::cout<<std::setprecision(10)<<std::setw(15)<<std::scientific<<"\nNE = "<<mesh->nElements;

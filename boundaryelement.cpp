@@ -33,11 +33,11 @@ void MC::BoundaryElement::draw(void)
     glColor4d(1.0, 1.0, 0.0, 1.0);
     glLineWidth(2.0f);
 
-    double deltat = 0.1;
+    double deltat = 0.01;
 
     glBegin(GL_LINES);
     {
-        for(int i=0; i<20; i++){
+        for(int i=0; i<2/deltat; i++){
             double t = -1.0+i*deltat;
             glVertex3d(curveX(t), curveY(t), 0.0);
             glVertex3d(curveX(t+deltat), curveY(t+deltat), 0.0);
