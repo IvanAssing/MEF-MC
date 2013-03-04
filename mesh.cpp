@@ -371,12 +371,12 @@ void MC::Mesh::createMesh_2(void)
 
             if(ksi1+INTERSECTION_TOLERANCE<=1.0 && ksi1-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveX(ksi1) - origin1)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i, i-1, boundaryElements[indexBoundaryElement], ksi1, 2);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i, i-1, boundaryElements[indexBoundaryElement], ksi1, (b2+2.0*c2*ksi1>=0)? -2:+2);
                 notStop = true;
             }
             if(ksi2+INTERSECTION_TOLERANCE<=1.0 && ksi2-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveX(ksi2) - origin1)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i, i-1, boundaryElements[indexBoundaryElement], ksi2, 2);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i, i-1, boundaryElements[indexBoundaryElement], ksi2, (b2+2.0*c2*ksi2>=0)? -2:+2);
                 notStop = true;
             }
 
@@ -390,12 +390,12 @@ void MC::Mesh::createMesh_2(void)
 
             if(ksi1+INTERSECTION_TOLERANCE<=1.0 && ksi1-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveX(ksi1) - origin1)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i-1, i, boundaryElements[indexBoundaryElement], ksi1, 2);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i-1, i, boundaryElements[indexBoundaryElement], ksi1, (b2+2.0*c2*ksi1>=0)? -2:+2);
                 notStop = true;
             }
             if(ksi2+INTERSECTION_TOLERANCE<=1.0 && ksi2-INTERSECTION_TOLERANCE>=-1.0){
                 indexFound = static_cast<int>(floor((boundaryElements[indexBoundaryElement]->curveX(ksi2) - origin1)/h12));
-                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i-1, i, boundaryElements[indexBoundaryElement], ksi2, 2);
+                elementEdges[nElementEdges++] = new MC::ElementEdge(indexFound, indexFound, i-1, i, boundaryElements[indexBoundaryElement], ksi2, (b2+2.0*c2*ksi2>=0)? -2:+2);
                 notStop = true;
             }
         }

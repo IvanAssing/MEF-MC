@@ -9,6 +9,17 @@ MC::ElementEdge::ElementEdge(int indexH1_, int indexH2_, int indexV1_, int index
     :indexH1(indexH1_), indexH2(indexH2_), indexV1(indexV1_), indexV2(indexV2_),
       element(element_), ksi(ksi_), dir(dir_)
 {
+    if(dir == -1){
+        int swap = indexH1;
+        indexH1 = indexH2;
+        indexH2 = swap;
+    }
+
+    if(dir == -2){
+        int swap = indexV1;
+        indexV1 = indexV2;
+        indexV2 = swap;
+    }
 
 }
 
@@ -46,7 +57,7 @@ void MC::ElementEdge::draw(void)
 
 int MC::ElementEdge::getEdgeIndex(void)
 {
-    if(dir == 1){
+    if(dir*dir == 1){
         if(indexH1<indexH2)
             return 1;
         else
