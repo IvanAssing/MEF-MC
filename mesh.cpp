@@ -418,10 +418,11 @@ void MC::Mesh::createMesh_2(void)
 
     for(int i=0; i<nElementEdges; i++){
 
-        // TESTE
+        /*// TESTE
         std::cout<<"\n\n IE: "<<i<<" \ DIR: "<<elementEdges[i]->dir;
         std::cout<<"\n 1: "<<elementEdges[i]->indexH1<<" - "<<elementEdges[i]->indexV1<<"\n 2: "<<elementEdges[i]->indexH2<<" - "<<elementEdges[i]->indexV2;
         std::cout<<"\n "<<elementEdges[i]->element<<" / "<<elementEdges[i]->ksi;
+        //*/
 
         int edgeIndex = elementEdges[i]->getEdgeIndex();
 

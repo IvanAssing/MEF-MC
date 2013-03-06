@@ -31,6 +31,7 @@ namespace MC
             void setIntersection(TypeIntersection type, BoundaryIntersection intersection);
 
             void findTriangleDivision(void);
+            void findTriangleDivision_2(void);
     };
 }
 #endif // ELEMENT_H
