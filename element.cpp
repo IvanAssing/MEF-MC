@@ -1,6 +1,8 @@
 #include "element.h"
 #include <cmath>
 
+#include <edgesegment.h>
+
 
 #define INTERSECTION_TOL 1.e-10
 #define INVALID_KSI 10.0
@@ -742,4 +744,37 @@ void MC::Element::findTriangleDivision_2(void)
 
 
 }
+
+void MC::Element::findTriangleDivision_3(void)
+{
+    double *pts = new double[100];
+
+    triangles = new TriangleElement[50];
+    nTriangles = 0;
+
+    double pts_vertex[4][2];
+
+    pts_vertex[0][0] = edges[1];
+    pts_vertex[0][1] = edges[0];
+    pts_vertex[1][0] = edges[1];
+    pts_vertex[1][1] = edges[2];
+    pts_vertex[2][0] = edges[3];
+    pts_vertex[2][1] = edges[2];
+    pts_vertex[3][0] = edges[3];
+    pts_vertex[3][1] = edges[0];
+
+
+    int nSegments = 0;
+    EdgeSegment *segments = new EdgeSegment[50];
+
+    // Segmentos iniciais
+    segments[nSegments++] = EdgeSegment(edges[3], edges[0], edges[1], edges[0]); // Face inferior
+    segments[nSegments++] = EdgeSegment(edges[1], edges[0], edges[1], edges[2]); // Face lateral direita
+    segments[nSegments++] = EdgeSegment(edges[1], edges[2], edges[3], edges[2]); // Face superior
+    segments[nSegments++] = EdgeSegment(edges[3], edges[2], edges[3], edges[0]); // Face lateral esquerda
+
+
+    segments[0].setLinks(&segments[3], &segments[1]);
+}
+
 

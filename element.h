@@ -32,6 +32,7 @@ namespace MC
 
             void findTriangleDivision(void);
             void findTriangleDivision_2(void);
+            void findTriangleDivision_3(void);
     };
 }
 #endif // ELEMENT_H

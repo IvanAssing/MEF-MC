@@ -28,7 +28,8 @@ SOURCES += main.cpp\
     graphic.cpp \
     boundaryintersection.cpp \
     elementedge.cpp \
-    triangleelement.cpp
+    triangleelement.cpp \
+    edgesegment.cpp
 
 HEADERS  += mainwindow.h \
     node.h \
@@ -43,6 +44,7 @@ HEADERS  += mainwindow.h \
     graphic.h \
     boundaryintersection.h \
     elementedge.h \
-    triangleelement.h
+    triangleelement.h \
+    edgesegment.h
 
 FORMS    += mainwindow.ui

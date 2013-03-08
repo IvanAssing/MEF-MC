@@ -495,9 +495,8 @@ void MC::Mesh::createMesh_2(void)
 //        //elements[i]->findTriangleDivision();
 //        elements[i]->findTriangleDivision_2();
 
-//    for(int i=0; i<1; i++)
-//        //elements[i]->findTriangleDivision();
-//        elements[i]->findTriangleDivision_2();
+    for(int i=0; i<nElementsUnderBoundary; i++)
+        elements[i]->findTriangleDivision_3();
 
 
     //for(int i=0; i<nElementsUnderBoundary; i++)
