@@ -241,14 +241,14 @@ void MC::TriangleElement::draw(void)
 {
     double dl = 0.1;
 
-    glColor4d(0.5, 1.0, 0.5, 0.4);
-    //    glPointSize(5.0);
-    //    glBegin(GL_POINTS);{
-    //        for(double l1=0.0; l1<=1.0; l1+=dl)
-    //            for(double l2=0.0; l2<=1.0-l1; l2+=dl)
-    //                glVertex2d(X(l1,l2), Y(l1,l2));
-    //    }
-    //    glEnd();
+    glColor4d(0.9, 1.0, 0.5, 1.0);
+        glPointSize(5.0);
+        glBegin(GL_POINTS);{
+            for(double l1=0.0; l1<=1.0; l1+=dl)
+                for(double l2=0.0; l2<=1.0-l1; l2+=dl)
+                    glVertex2d(X(l1,l2), Y(l1,l2));
+        }
+        glEnd();
 
     for(double l1=0.0; l1<1.0; l1+=dl){
 

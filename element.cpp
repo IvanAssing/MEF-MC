@@ -1,6 +1,7 @@
 #include "element.h"
 #include <cmath>
 
+
 #define INTERSECTION_TOL 1.e-10
 #define INVALID_KSI 10.0
 
@@ -47,36 +48,37 @@ void MC::Element::draw(void)
     }
     glEnd();
 
-//    glColor4d(0.0, 1.0, 0.0, 0.8);
-//    glLineWidth(2.5f);
 
-//    glBegin(GL_LINE_LOOP);
-//    {
-//        glVertex3d(edges[3], edges[0], 0.0);
-//        glVertex3d(edges[1], edges[0], 0.0);
-//        glVertex3d(edges[1], edges[2], 0.0);
-//        glVertex3d(edges[3], edges[2], 0.0);
-//    }
-//    glEnd();
+   //    glColor4d(0.0, 1.0, 0.0, 0.8);
+    //    glLineWidth(2.5f);
+
+    //    glBegin(GL_LINE_LOOP);
+    //    {
+    //        glVertex3d(edges[3], edges[0], 0.0);
+    //        glVertex3d(edges[1], edges[0], 0.0);
+    //        glVertex3d(edges[1], edges[2], 0.0);
+    //        glVertex3d(edges[3], edges[2], 0.0);
+    //    }
+    //    glEnd();
 
 
-//    glLineWidth(4.5f);
-//    glBegin(GL_LINES);
-//    {
-//        (adjacentElements[0]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
-//        glVertex3d(edges[3], edges[0], 0.0);
-//        glVertex3d(edges[1], edges[0], 0.0);
-//        (adjacentElements[1]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
-//        glVertex3d(edges[1], edges[0], 0.0);
-//        glVertex3d(edges[1], edges[2], 0.0);
-//        (adjacentElements[2]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
-//        glVertex3d(edges[1], edges[2], 0.0);
-//        glVertex3d(edges[3], edges[2], 0.0);
-//        (adjacentElements[3]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
-//        glVertex3d(edges[3], edges[2], 0.0);
-//        glVertex3d(edges[3], edges[0], 0.0);
-//    }
-//    glEnd();
+    //    glLineWidth(4.5f);
+    //    glBegin(GL_LINES);
+    //    {
+    //        (adjacentElements[0]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
+    //        glVertex3d(edges[3], edges[0], 0.0);
+    //        glVertex3d(edges[1], edges[0], 0.0);
+    //        (adjacentElements[1]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
+    //        glVertex3d(edges[1], edges[0], 0.0);
+    //        glVertex3d(edges[1], edges[2], 0.0);
+    //        (adjacentElements[2]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
+    //        glVertex3d(edges[1], edges[2], 0.0);
+    //        glVertex3d(edges[3], edges[2], 0.0);
+    //        (adjacentElements[3]) ? glColor4d(1.0, 0.0, 0.0, 0.8) : glColor4d(0.0, 1.0, 0.0, 0.8);
+    //        glVertex3d(edges[3], edges[2], 0.0);
+    //        glVertex3d(edges[3], edges[0], 0.0);
+    //    }
+    //    glEnd();
 
 }
 
@@ -201,10 +203,10 @@ int MC::Element::normalizeEdge(int edge)
 
 void MC::Element::setIntersection(MC::TypeIntersection type_, BoundaryIntersection intersection_)
 {
-    if(index == 0)
-    {
-        index = 0;
-    }
+    //    if(index == 0)
+    //    {
+    //        index = 0;
+    //    }
 
 
     if(type_ == MC::Output){
@@ -302,6 +304,58 @@ void MC::Element::findTriangleDivision(void)
     int ni = 0;
 
 
+    /////
+    if(nIntersections == 2 && intersections[0].edge == intersections[1].edge){
+
+        int np = 0;
+
+        pts[np++] = intersections[0].element->curveX(intersections[0].ksi);
+        pts[np++] = intersections[0].element->curveY(intersections[0].ksi);
+
+        pts[np++] = intersections[0].element->curveX(0.5*(intersections[0].ksi+1.));
+        pts[np++] = intersections[0].element->curveY(0.5*(intersections[0].ksi+1.));
+
+        pts[np++] = intersections[0].element->nodes[2]->x;
+        pts[np++] = intersections[0].element->nodes[2]->y;
+
+        pts[np++] = intersections[1].element->curveX(0.5*(intersections[1].ksi-1.));
+        pts[np++] = intersections[1].element->curveY(0.5*(intersections[1].ksi-1.));
+
+        double px = intersections[1].element->curveX(intersections[1].ksi);
+        double py = intersections[1].element->curveY(intersections[1].ksi);
+
+        pts[np++] = px;
+        pts[np++] = py;
+
+        pts[np++] = 0.5*(intersections[0].element->curveX(intersections[0].ksi)+px);
+        pts[np++] = 0.5*(intersections[0].element->curveY(intersections[0].ksi)+py);
+
+
+
+
+        double med_x = 0;
+        double med_y = 0;
+
+        for(int i=0; i<np; i+=2){
+            med_x += pts[i];
+            med_y += pts[i+1];
+        }
+
+        med_x /= 0.5*np;
+        med_y /= 0.5*np;
+
+
+        for(int i=0; i<np-4; i+=4){
+            triangles[nTriangles++] = MC::TriangleElement(med_x, med_y, 0.5*(med_x+pts[i]), 0.5*(med_y+pts[i+1]), pts[i], pts[i+1], pts[i+2], pts[i+3], pts[i+4], pts[i+5], 0.5*(med_x+pts[i+4]), 0.5*(med_y+pts[i+5]));
+        }
+        triangles[nTriangles++] = MC::TriangleElement(med_x, med_y, 0.5*(med_x+pts[np-4]), 0.5*(med_y+pts[np-3]), pts[np-4], pts[np-3], pts[np-2], pts[np-1], pts[0], pts[1], 0.5*(med_x+pts[0]), 0.5*(med_y+pts[1]));
+
+        return;
+    }
+
+    ////*/
+
+
     while(ni < nIntersections){
 
         int np = 0;
@@ -362,12 +416,12 @@ void MC::Element::findTriangleDivision(void)
         pts[np++] = 0.5*(prev_y + intersections[ni].element->curveY(intersections[ni].ksi));
 
 
-//        glColor3d(0.0, 1.0, 0.0);
-//        glPointSize(10.0);
-//        glBegin(GL_POINTS);
-//        for(int i=0; i<np; i+=2)
-//            glVertex2d(pts[i], pts[i+1]);
-//        glEnd();
+        //        glColor3d(0.0, 1.0, 0.0);
+        //        glPointSize(10.0);
+        //        glBegin(GL_POINTS);
+        //        for(int i=0; i<np; i+=2)
+        //            glVertex2d(pts[i], pts[i+1]);
+        //        glEnd();
 
         if(concavePolygon ==false || np <=16){
             //return;
@@ -411,8 +465,8 @@ void MC::Element::findTriangleDivision(void)
             for(int i=concavePolygon_indexPoint + 8; i<np-4; i+=4){
                 triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[i]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[i+1]), pts[i], pts[i+1],  pts[i+2], pts[i+3], pts[i+4], pts[i+5], 0.5*(pts[concavePolygon_indexPoint]+pts[i+4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[i+5]));
             }
-           //triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], 0.5*(pts[concavePolygon_indexPoint]+pts[0]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[1]));
-             triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], pts[2], pts[3]);
+            //triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], 0.5*(pts[concavePolygon_indexPoint]+pts[0]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[1]));
+            triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], pts[2], pts[3]);
             //triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], 0., 0., pts[np-4], pts[np-3], 0., 0., pts[0], pts[1], 0., 0.);
 
         }
@@ -445,7 +499,59 @@ void MC::Element::findTriangleDivision_2(void)
     pts_vertex[3][0] = edges[3];
     pts_vertex[3][1] = edges[0];
 
+
     int ni = 0;
+
+    /////
+    if(nIntersections == 2 && intersections[0].edge == intersections[1].edge){
+
+        int np = 0;
+
+        pts[np++] = intersections[0].element->curveX(intersections[0].ksi);
+        pts[np++] = intersections[0].element->curveY(intersections[0].ksi);
+
+        pts[np++] = intersections[0].element->curveX(0.5*(intersections[0].ksi+1.));
+        pts[np++] = intersections[0].element->curveY(0.5*(intersections[0].ksi+1.));
+
+        pts[np++] = intersections[0].element->nodes[2]->x;
+        pts[np++] = intersections[0].element->nodes[2]->y;
+
+        pts[np++] = intersections[1].element->curveX(0.5*(intersections[1].ksi-1.));
+        pts[np++] = intersections[1].element->curveY(0.5*(intersections[1].ksi-1.));
+
+        double px = intersections[1].element->curveX(intersections[1].ksi);
+        double py = intersections[1].element->curveY(intersections[1].ksi);
+
+        pts[np++] = px;
+        pts[np++] = py;
+
+        pts[np++] = 0.5*(intersections[0].element->curveX(intersections[0].ksi)+px);
+        pts[np++] = 0.5*(intersections[0].element->curveY(intersections[0].ksi)+py);
+
+
+
+
+        double med_x = 0;
+        double med_y = 0;
+
+        for(int i=0; i<np; i+=2){
+            med_x += pts[i];
+            med_y += pts[i+1];
+        }
+
+        med_x /= 0.5*np;
+        med_y /= 0.5*np;
+
+
+        for(int i=0; i<np-4; i+=4){
+            triangles[nTriangles++] = MC::TriangleElement(med_x, med_y, 0.5*(med_x+pts[i]), 0.5*(med_y+pts[i+1]), pts[i], pts[i+1], pts[i+2], pts[i+3], pts[i+4], pts[i+5], 0.5*(med_x+pts[i+4]), 0.5*(med_y+pts[i+5]));
+        }
+        triangles[nTriangles++] = MC::TriangleElement(med_x, med_y, 0.5*(med_x+pts[np-4]), 0.5*(med_y+pts[np-3]), pts[np-4], pts[np-3], pts[np-2], pts[np-1], pts[0], pts[1], 0.5*(med_x+pts[0]), 0.5*(med_y+pts[1]));
+
+        return;
+    }
+
+    ////*/
 
 
     while(ni < nIntersections){
@@ -491,11 +597,74 @@ void MC::Element::findTriangleDivision_2(void)
         int iEdgeIntBegin = intersections[ni+1].edge;
         int iEdgeIntEnd = intersections[ni].edge;
 
-        int ie, ne = iEdgeIntEnd-iEdgeIntBegin;
+        int ne = iEdgeIntEnd-iEdgeIntBegin;
 
         if(ne <=0) ne +=4;
 
+        bool status = true;
+
         for(int i=0, ie = iEdgeIntBegin; i<ne; i++, ie = normalizeEdge(ie+1)){
+            if(nIntersections == 4)
+                if(intersections[2].edge == ie){
+                    double pe = intersections[2].valueEdge(ie);
+                    double pi = ie%2 ? prev_y : prev_x;
+                    double ps = ie%2 ? pts_vertex[ie][1] : pts_vertex[ie][0];
+
+                    if(pe <= ps && pe >= pi){
+                        double px = intersections[2].element->curveX(intersections[2].ksi);
+                        double py = intersections[2].element->curveY(intersections[2].ksi);
+
+                        pts[np++] = 0.5*(prev_x + px);
+                        pts[np++] = 0.5*(prev_y + py);
+
+                        pts[np++] = px;
+                        pts[np++] = py;
+
+                        if(intersections[2].element == intersections[3].element){
+                            pts[np++] = intersections[2].element->curveX(0.5*(intersections[2].ksi+intersections[3].ksi));
+                            pts[np++] = intersections[2].element->curveY(0.5*(intersections[2].ksi+intersections[3].ksi));
+                        }
+                        else{
+                            pts[np++] = intersections[2].element->curveX(0.5*(intersections[2].ksi+1.));
+                            pts[np++] = intersections[2].element->curveY(0.5*(intersections[2].ksi+1.));
+
+                            concavePolygon_indexPoint = np;
+
+                            pts[np++] = intersections[2].element->nodes[2]->x;
+                            pts[np++] = intersections[2].element->nodes[2]->y;
+
+                            pts[np++] = intersections[3].element->curveX(0.5*(intersections[3].ksi-1.));
+                            pts[np++] = intersections[3].element->curveY(0.5*(intersections[3].ksi-1.));
+
+                            concavePolygon = true;
+
+                        }
+
+                        pts[np++] = intersections[3].element->curveX(intersections[3].ksi);
+                        pts[np++] = intersections[3].element->curveY(intersections[3].ksi);
+
+                        prev_x = intersections[3].element->curveX(intersections[3].ksi);
+                        prev_y = intersections[3].element->curveY(intersections[3].ksi);
+
+                        iEdgeIntBegin = intersections[3].edge;
+                        iEdgeIntEnd = intersections[0].edge;
+
+                        ne = iEdgeIntEnd-iEdgeIntBegin;
+
+                        if(ne <=0) ne +=4;
+
+                        i = 0;
+
+                        ie = iEdgeIntBegin;
+
+                        status = false;
+
+                        continue;
+
+                    }
+                }
+
+
             pts[np++] = 0.5*(prev_x + pts_vertex[ie][0]);
             pts[np++] = 0.5*(prev_y + pts_vertex[ie][1]);
             pts[np++] = pts_vertex[ie][0];
@@ -508,12 +677,12 @@ void MC::Element::findTriangleDivision_2(void)
         pts[np++] = 0.5*(prev_y + intersections[ni].element->curveY(intersections[ni].ksi));
 
 
-//        glColor3d(0.0, 1.0, 0.0);
-//        glPointSize(10.0);
-//        glBegin(GL_POINTS);
-//        for(int i=0; i<np; i+=2)
-//            glVertex2d(pts[i], pts[i+1]);
-//        glEnd();
+        //        glColor3d(0.0, 1.0, 0.0);
+        //        glPointSize(10.0);
+        //        glBegin(GL_POINTS);
+        //        for(int i=0; i<np; i+=2)
+        //            glVertex2d(pts[i], pts[i+1]);
+        //        glEnd();
 
         if(concavePolygon ==false || np <=16){
             //return;
@@ -557,13 +726,15 @@ void MC::Element::findTriangleDivision_2(void)
             for(int i=concavePolygon_indexPoint + 8; i<np-4; i+=4){
                 triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[i]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[i+1]), pts[i], pts[i+1],  pts[i+2], pts[i+3], pts[i+4], pts[i+5], 0.5*(pts[concavePolygon_indexPoint]+pts[i+4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[i+5]));
             }
-           //triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], 0.5*(pts[concavePolygon_indexPoint]+pts[0]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[1]));
-             triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], pts[2], pts[3]);
+            //triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], 0.5*(pts[concavePolygon_indexPoint]+pts[0]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[1]));
+            triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1],0.5*(pts[concavePolygon_indexPoint]+pts[np-4]), 0.5*(pts[concavePolygon_indexPoint+1]+pts[np-3]), pts[np-4], pts[np-3],  pts[np-2], pts[np-1], pts[0], pts[1], pts[2], pts[3]);
             //triangles[nTriangles++] = MC::TriangleElement(pts[concavePolygon_indexPoint], pts[concavePolygon_indexPoint+1], 0., 0., pts[np-4], pts[np-3], 0., 0., pts[0], pts[1], 0., 0.);
 
         }
 
-        ni += 2;
+
+        if(status)
+            ni += 2;
 
     }
 

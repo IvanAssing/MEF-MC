@@ -45,6 +45,20 @@ void MC::Mesh::draw(void)
     for(int i=0; i<nElements; i++)
         elements[i]->draw();
 
+
+    ///
+    glColor4d(0.9, 0.0, 0.0, 0.4);
+    glBegin(GL_QUADS);
+    {
+        glVertex3d(elements[0]->edges[3], elements[0]->edges[0], 0.0);
+        glVertex3d(elements[0]->edges[1], elements[0]->edges[0], 0.0);
+        glVertex3d(elements[0]->edges[1], elements[0]->edges[2], 0.0);
+        glVertex3d(elements[0]->edges[3], elements[0]->edges[2], 0.0);
+    }
+    glEnd();
+    ///
+
+
     for(int i=nElementsUnderBoundary; i<nElements; i++)
         elements[i]->draw();
 
@@ -477,8 +491,14 @@ void MC::Mesh::createMesh_2(void)
     for(int i=0; i<nElements; i++)
         setInternalLinks(elements[i]);
 
-    for(int i=0; i<nElementsUnderBoundary; i++)
-        elements[i]->findTriangleDivision();
+//    for(int i=0; i<nElementsUnderBoundary; i++)
+//        //elements[i]->findTriangleDivision();
+//        elements[i]->findTriangleDivision_2();
+
+//    for(int i=0; i<1; i++)
+//        //elements[i]->findTriangleDivision();
+//        elements[i]->findTriangleDivision_2();
+
 
     //for(int i=0; i<nElementsUnderBoundary; i++)
     //        elements[29]->findTriangleDivision();

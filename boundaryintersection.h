@@ -23,6 +23,7 @@ namespace MC
             BoundaryIntersection(BoundaryElement *element, double ksi, int edge);
 
             void draw(void);
+            double valueEdge(int edge);
     };
 }
 

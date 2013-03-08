@@ -25,3 +25,11 @@ void MC::BoundaryIntersection::draw(void)
     }
     glEnd();
 }
+
+double MC::BoundaryIntersection::valueEdge(int edge)
+{
+    if(edge%2)
+        return element->curveY(ksi);
+    else
+        return element->curveX(ksi);
+}
